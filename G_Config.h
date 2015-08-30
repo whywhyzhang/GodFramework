@@ -122,9 +122,12 @@ const MES_TYPE M_POI_DRW=207;
 const MES_TYPE M_LIN_DRW=208;
 const MES_TYPE M_REC_DRW=209;
 const MES_TYPE M_CIR_DRW=210;
-const MES_TYPE M_REC_FIL=211;
+const MES_TYPE M_REC_FIL=212;
 
 // Eye message type:
 const MES_TYPE M_PAINT  =300;
+
+// Button message type:
+const MES_TYPE M_BUT_ON =400;
 
 #endif

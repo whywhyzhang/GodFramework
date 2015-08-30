@@ -103,7 +103,7 @@ void L_Key_Mou_Win::Event_Happend()
 			break;
 		case Expose:
 			if(event_rem[0] & LM_EXPOSE)
-				p_world->Message_Send(MESSAGE{M_EXPOSE});
+				p_world->Message_Send(MESSAGE{M_EXPOSE,-1});
 			break;
 		case ButtonPress:
 			if(event_rem[xlib_event.xbutton.button] & LM_MOU_PRE)

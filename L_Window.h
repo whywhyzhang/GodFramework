@@ -12,7 +12,8 @@
 class L_Window
 {
 	private:
-		Display *xlib_dis;
+		static Display *xlib_dis;
+		static int win_cou;
 		Window xlib_win;
 		
 		SIZE win_size;
@@ -32,6 +33,9 @@ class L_Window
 
 		L_Key_Mou_Win * Get_KeyMouse_Pointer() const;
 		L_Monitor * Get_Monitor_Pointer() const;
+		
+		bool Event_Register(const EVENT &);
+		void Register_To_World(G_World *);
 };
 
 #endif

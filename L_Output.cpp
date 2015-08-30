@@ -3,6 +3,7 @@
 */
 
 #include "L_Output.h"
+#include "G_World.h"
 
 /////////////////////////////////////////////////////
 // The function of L_Monitor.
@@ -173,6 +174,24 @@ void L_Monitor::Picture_Draw(POS p,SIZE s,unsigned char *buf)
 			if(temp!=TRANS_COLOR)
 				Point_Draw(dp,temp);
 		}
+}
+
+void L_Monitor::Register_To_World(G_World *p_world)
+{
+	p_world->Object_Register(this);
+	p_world->Message_Process_Register(M_EXPOSE ,obj_num);
+	p_world->Message_Process_Register(M_BUF_SHW,obj_num);
+	p_world->Message_Process_Register(M_LIN_SET,obj_num);
+	p_world->Message_Process_Register(M_FIL_SET,obj_num);
+	p_world->Message_Process_Register(M_FOR_COL,obj_num);
+	p_world->Message_Process_Register(M_BAC_COL,obj_num);
+	p_world->Message_Process_Register(M_STR_DRW,obj_num);
+	p_world->Message_Process_Register(M_POI_DRW,obj_num);
+	p_world->Message_Process_Register(M_LIN_DRW,obj_num);
+	p_world->Message_Process_Register(M_REC_DRW,obj_num);
+	p_world->Message_Process_Register(M_CIR_DRW,obj_num);
+	p_world->Message_Process_Register(M_REC_FIL,obj_num);
+
 }
 
 //////////////////////////////////////////////////////

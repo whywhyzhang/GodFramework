@@ -27,6 +27,14 @@ bool G_Object::World_Register(G_World *poi)
 	return 1;
 }
 
+void G_Object::Register_To_World(G_World *poi)
+{
+	poi->Object_Register(this);
+}
+
+void G_Object::operator () ()
+{}
+
 int G_Object::Message_Process(const MESSAGE & temp)
 {
 	Message_Process(&temp);

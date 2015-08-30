@@ -17,15 +17,17 @@ class S_Button : public G_Sprit
 		G_Object * fun_rem;
 
 	public:
-		S_Button();
-		S_Button(POS,SIZE);
+		S_Button(POS=POS(0,0),SIZE=SIZE(100,50));
 		~S_Button();
 
 		virtual void Button_Draw();
 
-		int Message_Process(const MESSAGE *);
+		int  Message_Process(const MESSAGE *);
+		
+		void Click_Register(G_World *);
 		bool Function_Register(G_Object *);
 		bool Function_Register(G_Object &);
+		void Function_Delete();
 };
 
 #endif
