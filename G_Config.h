@@ -45,6 +45,9 @@ const OBJECT_TYPE OBJ_EYE=3;
 typedef int KEY_ID;
 typedef int KEY_STA;
 
+// Config about mouse.
+const int MOU_BUTTON_NUM=4;
+
 // Config about window.
 
 typedef int COLOR;

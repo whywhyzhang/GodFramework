@@ -50,6 +50,8 @@ class G_World
 
 		bool Object_Register(G_Object *);							// Register a object.
 		bool Object_Delete(const OBJECT_NUM);						// Delete a object according to his num.
+		
+		void Visual_Change(OBJECT_NUM,bool);						// Change the visual of Object.
 };
 
 #endif

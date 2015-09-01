@@ -10,7 +10,8 @@ S_Button::S_Button(POS p,SIZE s)
 	spr_p=p;
 	spr_size=s;
 
-	fun_rem=0;
+	for(int i=0;i<MOU_BUTTON_NUM;++i)
+		fun_rem[i]=0;
 }
 
 S_Button::~S_Button()
@@ -20,37 +21,64 @@ void S_Button::Button_Draw()
 {
 	if(p_world)
 	{
-		p_world->Message_Send(MESSAGE{M_REC_DRW,spr_p.x,spr_p.y,spr_size.w,spr_size.h,0});
-		p_world->Message_Send(MESSAGE{M_BUF_SHW,-1});
+		if(mou_on)
+			p_world->Message_Send(MESSAGE{M_REC_FIL,spr_p.x,spr_p.y,spr_size.w,spr_size.h,0x6f6f6f});
+		else
+			p_world->Message_Send(MESSAGE{M_REC_DRW,spr_p.x,spr_p.y,spr_size.w,spr_size.h,0});
 	}
 }
 
 int S_Button::Message_Process(const MESSAGE *mes)
 {
-	if(mes->num[1]>=spr_p.x && mes->num[1]<=spr_p.x+spr_size.w \
-	&& mes->num[2]>=spr_p.y && mes->num[2]<=spr_p.y+spr_size.h \
-	&& fun_rem)
-		(*fun_rem)();
+	switch(mes->type)
+	{
+		case M_MOU_MOV:
+			if(mes->num[1]>=spr_p.x && mes->num[1]<=spr_p.x+spr_size.w \
+			&& mes->num[2]>=spr_p.y && mes->num[2]<=spr_p.y+spr_size.h)
+				mou_on=1;
+			else
+				mou_on=0;
+			break;
+		case M_MOU_PRE:
+			if(fun_rem[mes->num[0]])
+				(*fun_rem[mes->num[0]])();
+			break;
+		default:
+			break;
+	}
 }
 
-void S_Button::Click_Register(G_World * p_obj)
+bool S_Button::Process_Register()
 {
-	p_obj->Message_Process_Register(M_MOU_PRE,obj_num);
-}
+	if(p_world) return 0;
+	
+	p_world->Message_Process_Register(M_MOU_PRE,obj_num);
+	p_world->Message_Process_Register(M_MOU_MOV,obj_num);
 
-bool S_Button::Function_Register(G_Object * p_obj)
-{
-	if(fun_rem) return 0;
-	fun_rem=p_obj;
 	return 1;
 }
 
-bool S_Button::Function_Register(G_Object & p_obj)
+void S_Button::Redraw()
 {
-	Function_Register(&p_obj);
+	Button_Draw();
 }
 
-void S_Button::Function_Delete()
+bool S_Button::Function_Register(G_Object * p_obj,int t)
 {
-	fun_rem=0;
+	if(t>=MOU_BUTTON_NUM || t<0) return 0;
+	if(fun_rem[t]) return 0;
+	fun_rem[t]=p_obj;
+
+	return 1;
+}
+
+bool S_Button::Function_Register(G_Object & p_obj,int t)
+{
+	Function_Register(&p_obj,t);
+}
+
+void S_Button::Function_Delete(int t)
+{
+	if(t>=MOU_BUTTON_NUM || t<0) return;
+	fun_rem[t]=0;
 }

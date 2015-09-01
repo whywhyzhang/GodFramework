@@ -7,8 +7,10 @@
 
 int G_Object::obj_cou=0;
 
-G_Object::G_Object(OBJECT_TYPE type):obj_type(type)
+G_Object::G_Object(OBJECT_TYPE type,bool t):obj_type(type)
 {
+	is_vis=t;
+	
 	obj_num=++obj_cou;
 	p_world=0;
 }
@@ -16,7 +18,10 @@ G_Object::G_Object(OBJECT_TYPE type):obj_type(type)
 G_Object::~G_Object()
 {
 	if(p_world)
+	{
+		if(is_vis) p_world->Visual_Change(obj_num,0);
 		p_world->Object_Delete(obj_num);
+	}
 }
 
 bool G_Object::World_Register(G_World *poi)
@@ -24,8 +29,13 @@ bool G_Object::World_Register(G_World *poi)
 	if(p_world) return 0;
 
 	p_world=poi;
+	if(is_vis)
+		p_world->Visual_Change(obj_num,is_vis);
 	return 1;
 }
+
+bool G_Object::Process_Register()
+{}
 
 void G_Object::Register_To_World(G_World *poi)
 {
@@ -54,3 +64,19 @@ OBJECT_TYPE G_Object::Obj_Type_Get() const
 {
 	return obj_type;
 }
+
+void G_Object::Visual_Set(bool t)
+{
+	if(t==is_vis) return;
+	is_vis=t;
+	if(p_world)
+		p_world->Visual_Change(obj_num,t);
+}
+
+bool G_Object::Visual_Get()
+{
+	return is_vis;
+}
+
+void G_Object::Redraw()
+{}

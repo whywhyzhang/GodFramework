@@ -150,6 +150,7 @@ bool G_World::Object_Register(G_Object * p_obj)
 	obj_rem.insert(pii (obj_num,p_obj));
 
 	p_obj->World_Register(this);
+	p_obj->Process_Register();
 
 	return 1;
 }
@@ -164,4 +165,23 @@ bool G_World::Object_Delete(const OBJECT_NUM num)
 	obj_rem.erase(num);
 
 	return 1;
+}
+
+void G_World::Visual_Change(OBJECT_NUM num, bool type)
+{
+	OBJ_ITER iter=obj_rem.find(num);
+	if(iter==obj_rem.end()) return;
+	
+	OBJ_ITER iter_eye;
+	G_Eye *p;
+	
+	for(iter_eye=obj_type_rem[OBJ_EYE].begin();iter_eye!=obj_type_rem[OBJ_EYE].end();++iter_eye)
+	{
+		p=(G_Eye *)(iter_eye->second);
+		
+		if(type)
+			p->Object_Register(iter->second);
+		else
+			p->Object_Delete(iter->second);
+	}
 }
