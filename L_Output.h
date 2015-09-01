@@ -21,6 +21,8 @@ class L_Monitor:public G_Output
 		POS pixmap_pos;
 		SIZE pixmap_size;
 		COLOR back_color;
+		XFontStruct * p_font;
+		int font_height;
 
 	public:
 		L_Monitor(Display * =NULL,Window * =NULL,COLOR =-1);
@@ -35,8 +37,9 @@ class L_Monitor:public G_Output
 		virtual void Fill_Set(int);									// Set the fill style for a fill.
 		virtual void BackColor_Set(COLOR);							// Set the Background color.
 		virtual void ForeColor_Set(COLOR);							// Set the Foreground color.
+		virtual bool Font_Set(const char *);								// Set the font.
 
-		virtual void String_Draw(POS,COLOR,char *,int);							// Output a string to pos, with a length.
+		virtual void String_Draw(POS,COLOR,char *,int,bool);		// Output a string to pos, with a length and whether pos is bottom-left.
 		virtual void Point_Draw(POS,COLOR);							// Draw a Point on POS with a COLOR.
 		virtual void Line_Draw(POS,POS,COLOR);						// Draw a line from POS to POS with a COLOR.
 		virtual void Rect_Draw(POS,SIZE,COLOR);

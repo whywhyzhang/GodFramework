@@ -48,6 +48,9 @@ typedef int KEY_STA;
 // Config about mouse.
 const int MOU_BUTTON_NUM=4;
 
+// Config about font.
+const char * const DEFAULT_FONT="r16";
+
 // Config about window.
 
 typedef int COLOR;
@@ -118,6 +121,7 @@ const MES_TYPE M_EXPOSE =200;
 const MES_TYPE M_BUF_SHW=201;
 const MES_TYPE M_LIN_SET=202;
 const MES_TYPE M_FIL_SET=203;
+const MES_TYPE M_FON_SET=213;
 const MES_TYPE M_FOR_COL=204;
 const MES_TYPE M_BAC_COL=205;
 const MES_TYPE M_STR_DRW=206;

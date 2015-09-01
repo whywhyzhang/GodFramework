@@ -5,10 +5,15 @@
 #include "S_Button.h"
 #include "G_World.h"
 
-S_Button::S_Button(POS p,SIZE s)
+S_Button::S_Button(POS p,SIZE s,char *str,int pri)
 {
+	if(str==0) text.clear();
+	else text=str;
+	
 	spr_p=p;
 	spr_size=s;
+	pri_num=pri;
+	mou_on=0;
 
 	for(int i=0;i<MOU_BUTTON_NUM;++i)
 		fun_rem[i]=0;
@@ -21,10 +26,24 @@ void S_Button::Button_Draw()
 {
 	if(p_world)
 	{
+		COLOR col;
+		MESSAGE mes={M_STR_DRW,spr_p.x+spr_size.w/2,spr_p.y+spr_size.h/2,0,text.length(),0};
+		mes.p=(char *)text.data();
+		
 		if(mou_on)
+		{
 			p_world->Message_Send(MESSAGE{M_REC_FIL,spr_p.x,spr_p.y,spr_size.w,spr_size.h,0x6f6f6f});
+			col=COL_WHITE;
+		}
 		else
+		{
+			p_world->Message_Send(MESSAGE{M_REC_FIL,spr_p.x,spr_p.y,spr_size.w,spr_size.h,COL_WHITE});
 			p_world->Message_Send(MESSAGE{M_REC_DRW,spr_p.x,spr_p.y,spr_size.w,spr_size.h,0});
+			col=0;
+		}
+		
+		mes.num[2]=col;
+		p_world->Message_Send(mes);
 	}
 }
 
@@ -33,14 +52,26 @@ int S_Button::Message_Process(const MESSAGE *mes)
 	switch(mes->type)
 	{
 		case M_MOU_MOV:
-			if(mes->num[1]>=spr_p.x && mes->num[1]<=spr_p.x+spr_size.w \
-			&& mes->num[2]>=spr_p.y && mes->num[2]<=spr_p.y+spr_size.h)
-				mou_on=1;
+			if(mes->num[0]>=spr_p.x && mes->num[0]<=spr_p.x+spr_size.w \
+			&& mes->num[1]>=spr_p.y && mes->num[1]<=spr_p.y+spr_size.h)
+			{
+				if(!mou_on)
+				{
+					mou_on=1;
+					p_world->Message_Send(MESSAGE{M_PAINT});
+				}
+			}
 			else
-				mou_on=0;
+			{
+				if(mou_on)
+				{
+					mou_on=0;
+					p_world->Message_Send(MESSAGE{M_PAINT});
+				}
+			}
 			break;
 		case M_MOU_PRE:
-			if(fun_rem[mes->num[0]])
+			if(mou_on && fun_rem[mes->num[0]])
 				(*fun_rem[mes->num[0]])();
 			break;
 		default:
@@ -50,7 +81,7 @@ int S_Button::Message_Process(const MESSAGE *mes)
 
 bool S_Button::Process_Register()
 {
-	if(p_world) return 0;
+	if(!p_world) return 0;
 	
 	p_world->Message_Process_Register(M_MOU_PRE,obj_num);
 	p_world->Message_Process_Register(M_MOU_MOV,obj_num);
@@ -61,6 +92,11 @@ bool S_Button::Process_Register()
 void S_Button::Redraw()
 {
 	Button_Draw();
+}
+
+void S_Button::Text_Set(char * s)
+{
+	if(s) text=s;
 }
 
 bool S_Button::Function_Register(G_Object * p_obj,int t)

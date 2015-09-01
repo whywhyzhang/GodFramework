@@ -11,10 +11,17 @@
 class E_2Dto2D : public G_Eye
 {
 	private:
+		class Sprit_Cmp
+		{
+			public:
+				bool operator () (const G_Sprit *, const G_Sprit *);
+		};
+		
+	private:
 		POS in_pos;
 		// The size of in is the same as the size of out.
 		
-		set <G_Sprit *> obj_rem;
+		set <G_Sprit *,Sprit_Cmp> obj_rem;
 		
 	private:
 		bool InRange(G_Sprit *);
@@ -34,8 +41,6 @@ class E_2Dto2D : public G_Eye
 		bool Process_Register();
 		int  Message_Process(const MESSAGE *);
 		void Redraw();
-		
-		int getnum() { return obj_rem.size(); }
 };
 
 #endif

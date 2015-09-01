@@ -27,6 +27,8 @@ L_Monitor::L_Monitor(Display *dis, Window *win, COLOR col)
 	XSetBackground(p_xlib_dis,xlib_gc,back_color);
 	XSetForeground(p_xlib_dis,xlib_gc,back_color);
 	XFillRectangle(p_xlib_dis,xlib_pixmap,xlib_gc,0,0,pixmap_size.w,pixmap_size.h);
+
+	Font_Set(DEFAULT_FONT);
 }
 
 L_Monitor::~L_Monitor()
@@ -52,6 +54,9 @@ int L_Monitor::Message_Process(const MESSAGE *mes)
 		case M_FIL_SET:
 			Fill_Set(num[0]);
 			break;
+		case M_FON_SET:
+			Font_Set((char *)mes->p);
+			break;
 		case M_FOR_COL:
 			ForeColor_Set(num[0]);
 			break;
@@ -59,7 +64,7 @@ int L_Monitor::Message_Process(const MESSAGE *mes)
 			BackColor_Set(num[0]);
 			break;
 		case M_STR_DRW:
-			String_Draw(POS(num[0],num[1]),num[2],(char *)mes->p,num[3]);
+			String_Draw(POS(num[0],num[1]),num[2],(char *)mes->p,num[3],num[4]);
 			break;
 		case M_POI_DRW:
 			Point_Draw(POS(num[0],num[1]),num[2]);
@@ -122,9 +127,30 @@ void L_Monitor::ForeColor_Set(COLOR col)
 	XSetForeground(p_xlib_dis,xlib_gc,col);
 }
 
-void L_Monitor::String_Draw(POS pos,COLOR col,char *str,int len)
+bool L_Monitor::Font_Set(const char * font_name)
+{
+	XFontStruct *temp;
+	temp=XLoadQueryFont(p_xlib_dis,font_name);
+	if(!temp) return 0;
+	p_font=temp;
+	font_height=p_font->ascent+p_font->descent;
+
+	XSetFont(p_xlib_dis,xlib_gc,p_font->fid);
+	
+	return 1;
+}
+
+void L_Monitor::String_Draw(POS pos,COLOR col,char *str,int len,bool bottom_left)
 {
 	ForeColor_Set(col);
+	
+	if(!bottom_left)
+	{
+		int width=XTextWidth(p_font,str,len);
+		pos.x-=width/2;
+		pos.y+=font_height/2;
+	}
+
 	XDrawString(p_xlib_dis,xlib_pixmap,xlib_gc,pos.x,pos.y,str,len);
 }
 

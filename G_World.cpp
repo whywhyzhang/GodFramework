@@ -180,8 +180,8 @@ void G_World::Visual_Change(OBJECT_NUM num, bool type)
 		p=(G_Eye *)(iter_eye->second);
 		
 		if(type)
-			p->Object_Register(iter->second);
+			p->Object_Register((G_Sprit *)iter->second);
 		else
-			p->Object_Delete(iter->second);
+			p->Object_Delete((G_Sprit *)iter->second);
 	}
 }

@@ -12,6 +12,7 @@ class G_Sprit : public G_Object
 	protected:
 		POS spr_p;
 		SIZE spr_size;
+		int pri_num;			// Priority num. Big is big.
 
 	public:
 		G_Sprit();
@@ -19,10 +20,13 @@ class G_Sprit : public G_Object
 		
 		virtual int Message_Process(const MESSAGE *)=0;
 		
-		POS Pos_Get();
-		SIZE Size_Get();
+		POS Pos_Get() const;
+		SIZE Size_Get() const;
+		int Pri_Get() const;
 		
 		virtual void Pos_Set(POS);
+		virtual void Size_Set(SIZE);
+		virtual void Pri_Set(int);
 		virtual void Move(POS);			// Move the spr_p by POS.
 };
 

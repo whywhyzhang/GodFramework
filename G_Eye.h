@@ -18,8 +18,8 @@ class G_Eye:public G_Object
 		virtual ~G_Eye()=0;
 
 		virtual int Message_Process(const MESSAGE *)=0;
-		virtual void Object_Register(G_Object *)=0;
-		virtual void Object_Delete(G_Object *)=0;
+		virtual void Object_Register(G_Sprit *)=0;
+		virtual void Object_Delete(G_Sprit *)=0;
 };
 
 #endif

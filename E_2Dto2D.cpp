@@ -6,6 +6,18 @@
 #include "G_World.h"
 #include "G_Sprit.h"
 
+bool E_2Dto2D::Sprit_Cmp::operator () (const G_Sprit *p1,const G_Sprit *p2)
+{
+	int t1,t2;
+	
+	t1=p1->Pri_Get();
+	t2=p2->Pri_Get();
+	
+	if(t1!=t2) return t1<t2;
+	
+	return p1->Obj_Num_Get() < p2->Obj_Num_Get();
+}
+
 E_2Dto2D::E_2Dto2D()
 {
 	out_pos=in_pos=POS(0,0);
