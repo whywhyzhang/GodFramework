@@ -141,6 +141,7 @@ const MES_TYPE M_LIN_DRW=208;
 const MES_TYPE M_REC_DRW=209;
 const MES_TYPE M_CIR_DRW=210;
 const MES_TYPE M_REC_FIL=212;
+const MES_TYPE M_PIC_DRW=214;
 
 // Eye message type:
 const MES_TYPE M_PAINT  =300;

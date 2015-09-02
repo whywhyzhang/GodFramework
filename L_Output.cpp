@@ -81,6 +81,9 @@ int L_Monitor::Message_Process(const MESSAGE *mes)
 		case M_REC_FIL:
 			Rect_Fill_Draw(POS(num[0],num[1]),SIZE(num[2],num[3]),num[4]);
 			break;
+		case M_PIC_DRW:
+			Picture_Draw(POS(num[0],num[1]),SIZE(num[2],num[3]),(unsigned char *)mes->p);
+			break;
 		default:
 			break;
 	}
@@ -247,7 +250,7 @@ void L_Monitor::Register_To_World(G_World *p_world)
 	p_world->Message_Process_Register(M_REC_DRW,obj_num);
 	p_world->Message_Process_Register(M_CIR_DRW,obj_num);
 	p_world->Message_Process_Register(M_REC_FIL,obj_num);
-
+	p_world->Message_Process_Register(M_PIC_DRW,obj_num);
 }
 
 //////////////////////////////////////////////////////
