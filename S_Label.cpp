@@ -2,10 +2,14 @@
    	The implement of class S_Label.
 */
 
+#include <algorithm>
+
 #include "S_Label.h"
 #include "G_World.h"
 
-S_Label::S_Label(POS pos,SIZE size,char *str,int t,int pri)
+using std::min;
+
+S_Label::S_Label(POS pos,SIZE size,char *str,int t,int lim,int pri)
 {
 	spr_p=pos;
 	spr_size=size;
@@ -13,6 +17,7 @@ S_Label::S_Label(POS pos,SIZE size,char *str,int t,int pri)
 	else text.clear();
 	out_type=MID_LEF;
 	pri_num=pri;
+	len_limit=lim;
 	have_frame=t;
 }
 
@@ -79,8 +84,8 @@ void S_Label::Label_Draw()
 			default:
 				break;
 		}
-
-		MESSAGE mes={M_STR_DRW,x,y,0,text.length(),out_type};
+		
+		MESSAGE mes={M_STR_DRW,x,y,0,min(len_limit,(int)text.length()),out_type};
 		mes.p=(char *)text.data();
 		p_world->Message_Send(mes);
 	}
@@ -114,6 +119,11 @@ void S_Label::Out_Type_Set(int t)
 		p_world->Message_Send(MESSAGE{M_PAINT});
 }
 
+void S_Label::Len_Limit_Set(int len)
+{
+	len_limit=len;
+}
+
 const char * S_Label::operator += (const string & str)
 {
 	text+=str;
@@ -141,4 +151,9 @@ const char * S_Label::operator -= (int num)
 const char * S_Label::Text_Get() const
 {
 	return text.data();
+}
+
+int S_Label::Text_Length_Get() const
+{
+	return text.length();
 }

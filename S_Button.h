@@ -14,7 +14,7 @@ using std::string;
 
 class S_Button : public G_Sprit
 {
-	private:
+	protected:
 		bool mou_on;								// Whether the mouse if on the Button.
 		string text;
 		
