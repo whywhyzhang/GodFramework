@@ -35,6 +35,14 @@ E_2Dto2D::E_2Dto2D(POS p1,POS p2,SIZE s)
 	obj_rem.clear();
 }
 
+E_2Dto2D::E_2Dto2D(SIZE s)
+{
+	in_pos=out_pos=POS(0,0);
+	out_size=s;
+	
+	obj_rem.clear();
+}
+
 E_2Dto2D::~E_2Dto2D()
 {}
 
@@ -66,6 +74,7 @@ int E_2Dto2D::Message_Process(const MESSAGE *mes)
 {
 	switch(mes->type)
 	{
+		case M_EXPOSE:
 		case M_PAINT:
 			Redraw();
 			break;

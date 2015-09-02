@@ -29,10 +29,18 @@ bool L_Key_Mou_Win::Event_Register(const EVENT &event)
 	switch(event.type)
 	{
 		case M_KEY_PRE:
-			event_rem[event.num[0]] |= LM_KEY_PRE;
+			if(event.num[0]==-1)
+				for(int i=0;i<256;++i)
+					event_rem[i] |= LM_KEY_PRE;
+			else
+				event_rem[event.num[0]] |= LM_KEY_PRE;
 			break;
 		case M_KEY_REL:
-			event_rem[event.num[0]] |= LM_KEY_REL;
+			if(event.num[0]==-1)
+				for(int i=0;i<256;++i)
+					event_rem[i] |= LM_KEY_REL;
+			else
+				event_rem[event.num[0]] |= LM_KEY_REL;
 			break;
 		case M_MOU_PRE:
 			event_rem[event.num[0]] |= LM_MOU_PRE;
@@ -59,10 +67,18 @@ bool L_Key_Mou_Win::Event_Delete(const EVENT &event)
 	switch(event.type)
 	{
 		case M_KEY_PRE:
-			event_rem[event.num[0]] &= ~LM_KEY_PRE;
+			if(event.num[0]==-1)
+				for(int i=0;i<256;++i)
+					event_rem[i] &= LM_KEY_PRE;
+			else
+				event_rem[event.num[0]] &= ~LM_KEY_PRE;
 			break;
 		case M_KEY_REL:
-			event_rem[event.num[0]] &= ~LM_KEY_REL;
+			if(event.num[0]==-1)
+				for(int i=0;i<256;++i)
+					event_rem[i] &= LM_KEY_REL;
+			else
+				event_rem[event.num[0]] &= ~LM_KEY_REL;
 			break;
 		case M_MOU_PRE:
 			event_rem[event.num[0]] &= ~LM_MOU_PRE;

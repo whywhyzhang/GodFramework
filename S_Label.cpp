@@ -5,14 +5,15 @@
 #include "S_Label.h"
 #include "G_World.h"
 
-S_Label::S_Label(POS pos,SIZE size,char *str,int pri)
+S_Label::S_Label(POS pos,SIZE size,char *str,int t,int pri)
 {
 	spr_p=pos;
 	spr_size=size;
 	if(str) text=str;
 	else text.clear();
-	out_type=TOP_LEF;
+	out_type=MID_LEF;
 	pri_num=pri;
+	have_frame=t;
 }
 
 S_Label::~S_Label()
@@ -23,22 +24,31 @@ void S_Label::Label_Draw()
 	if(p_world)
 	{
 		p_world->Message_Send(MESSAGE{M_REC_FIL,spr_p.x,spr_p.y,spr_size.w,spr_size.h,COL_WHITE});
-		p_world->Message_Send(MESSAGE{M_REC_DRW,spr_p.x,spr_p.y,spr_size.w,spr_size.h,0});
+		
+		if(have_frame)
+			p_world->Message_Send(MESSAGE{M_REC_DRW,spr_p.x,spr_p.y,spr_size.w,spr_size.h,0});
 		
 		int x,y;
+		int OFFSET=6;
 		x=spr_p.x,y=spr_p.y;
 		
 		switch(out_type)
 		{
 			case TOP_LEF:
+				x+=OFFSET;
+				y+=OFFSET;
 				break;
 			case TOP_MID:
 				x+=spr_size.w/2;
+				y+=OFFSET;
 				break;
 			case TOP_RIG:
 				x+=spr_size.w;
+				x-=OFFSET;
+				y+=OFFSET;
 				break;
 			case MID_LEF:
+				x+=OFFSET;
 				y+=spr_size.h/2;
 				break;
 			case MID_MID:
@@ -47,18 +57,24 @@ void S_Label::Label_Draw()
 				break;
 			case MID_RIG:
 				x+=spr_size.w;
+				x-=OFFSET;
 				y+=spr_size.h/2;
 				break;
 			case LOW_LEF:
+				x+=OFFSET;
 				y+=spr_size.h;
+				y-=OFFSET;
 				break;
 			case LOW_MID:
 				x+=spr_size.w/2;
 				y+=spr_size.h;
+				y-=OFFSET;
 				break;
 			case LOW_RIG:
 				x+=spr_size.w;
+				x-=OFFSET;
 				y+=spr_size.h;
+				y-=OFFSET;
 				break;
 			default:
 				break;

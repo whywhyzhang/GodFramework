@@ -16,9 +16,10 @@ class S_Label : public G_Sprit
 	private:
 		string text;
 		int out_type;
+		int have_frame;
 
 	public:
-		S_Label(POS=POS(0,0),SIZE=SIZE(150,50),char * =0,int=0);
+		S_Label(POS=POS(0,0),SIZE=SIZE(150,50),char * =0,int=0,int=0);
 		~S_Label();
 
 		virtual void Label_Draw();

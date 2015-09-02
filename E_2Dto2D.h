@@ -29,6 +29,7 @@ class E_2Dto2D : public G_Eye
 	public:
 		E_2Dto2D();
 		E_2Dto2D(POS,POS,SIZE);
+		E_2Dto2D(SIZE);
 		~E_2Dto2D();
 
 		void Size_Set(SIZE);
