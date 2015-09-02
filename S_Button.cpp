@@ -27,7 +27,7 @@ void S_Button::Button_Draw()
 	if(p_world)
 	{
 		COLOR col;
-		MESSAGE mes={M_STR_DRW,spr_p.x+spr_size.w/2,spr_p.y+spr_size.h/2,0,text.length(),0};
+		MESSAGE mes={M_STR_DRW,spr_p.x+spr_size.w/2,spr_p.y+spr_size.h/2,0,text.length(),MID_MID};
 		mes.p=(char *)text.data();
 		
 		if(mou_on)
@@ -97,6 +97,10 @@ void S_Button::Redraw()
 void S_Button::Text_Set(char * s)
 {
 	if(s) text=s;
+	else text.clear();
+	
+	if(p_world)
+		p_world->Message_Send(MESSAGE{M_PAINT});			// Maybe need.
 }
 
 bool S_Button::Function_Register(G_Object * p_obj,int t)

@@ -140,15 +140,45 @@ bool L_Monitor::Font_Set(const char * font_name)
 	return 1;
 }
 
-void L_Monitor::String_Draw(POS pos,COLOR col,char *str,int len,bool bottom_left)
+void L_Monitor::String_Draw(POS pos,COLOR col,char *str,int len,int type)
 {
 	ForeColor_Set(col);
+	int width=XTextWidth(p_font,str,len);
 	
-	if(!bottom_left)
+	switch(type)
 	{
-		int width=XTextWidth(p_font,str,len);
-		pos.x-=width/2;
-		pos.y+=font_height/2;
+		case TOP_LEF:
+			pos.y+=font_height;
+			break;
+		case TOP_MID:
+			pos.x-=width/2;
+			pos.y+=font_height;
+			break;
+		case TOP_RIG:
+			pos.x-=width;
+			pos.y+=font_height;
+			break;
+		case MID_LEF:
+			pos.y+=font_height/2;
+			break;
+		case MID_MID:
+			pos.x-=width/2;
+			pos.y+=font_height/2;
+			break;
+		case MID_RIG:
+			pos.x-=width;
+			pos.y+=font_height/2;
+			break;
+		case LOW_LEF:
+			break;
+		case LOW_MID:
+			pos.x-=width/2;
+			break;
+		case LOW_RIG:
+			pos.x-=width;
+			break;
+		default:
+			break;
 	}
 
 	XDrawString(p_xlib_dis,xlib_pixmap,xlib_gc,pos.x,pos.y,str,len);

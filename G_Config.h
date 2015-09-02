@@ -48,8 +48,19 @@ typedef int KEY_STA;
 // Config about mouse.
 const int MOU_BUTTON_NUM=4;
 
-// Config about font.
+// Config about fonts.
 const char * const DEFAULT_FONT="r16";
+
+// Config aobout output.
+const int TOP_LEF=0;
+const int TOP_MID=1;
+const int TOP_RIG=2;
+const int MID_LEF=3;
+const int MID_MID=4;
+const int MID_RIG=5;
+const int LOW_LEF=6;
+const int LOW_MID=7;
+const int LOW_RIG=8;
 
 // Config about window.
 

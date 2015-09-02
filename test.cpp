@@ -1,5 +1,6 @@
 #include "L_Window.h"
 #include "S_Button.h"
+#include "S_Label.h"
 #include "E_2Dto2D.h"
 #include "God.h"
 
@@ -14,8 +15,10 @@ class Temp : public G_Sprit
 {
 	public:
 		int num;
+		S_Label *lab;
 		Temp()
 		{
+			lab=0;
 			spr_p=POS(0,0);
 			spr_size=SIZE(10,10);
 		}
@@ -23,8 +26,11 @@ class Temp : public G_Sprit
 		void operator () ()
 		{
 			cerr<<"haha\n";
-			MESSAGE mes;
-			Message_Process(&mes);
+			if(lab)
+				(*lab)+=string("q");
+	//		cerr<<"haha\n";
+	//		MESSAGE mes;
+	//		Message_Process(&mes);
 	//		p_world->Message_Send(MESSAGE{M_LIN_DRW,10,10,30,30,0});
 	//		p_world->Message_Send(MESSAGE{M_BUF_SHW,-1});
 		}
@@ -63,9 +69,15 @@ int main()
 	L_Window win(POS(10,10),SIZE(700,500));
 	Temp * p_temp=new Temp;
 	S_Button *but=new S_Button(POS(50,10));
+	S_Label * lab=new S_Label(POS(200,200));
 	E_2Dto2D *eye=new E_2Dto2D;
 	
-	but->Text_Set("buttonasgasdgasdgasg");
+	but->Text_Set("Button");
+	lab->Text_Set("asdfg");
+
+	p_temp->lab=lab;
+
+	lab->Out_Type_Set(4);
 
 	win.Window_Show();
 
@@ -81,6 +93,7 @@ int main()
 
 	but->Function_Register(p_temp,1);
 	p_world->Object_Register(but);
+	p_world->Object_Register(lab);
 	
 	p_world->Object_Register(p_temp);
 	p_world->Message_Process_Register(M_KEY_PRE,p_temp->Obj_Num_Get());

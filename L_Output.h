@@ -39,7 +39,7 @@ class L_Monitor:public G_Output
 		virtual void ForeColor_Set(COLOR);							// Set the Foreground color.
 		virtual bool Font_Set(const char *);								// Set the font.
 
-		virtual void String_Draw(POS,COLOR,char *,int,bool);		// Output a string to pos, with a length and whether pos is bottom-left.
+		virtual void String_Draw(POS,COLOR,char *,int,int);			// Output a string to pos, with a length and whether pos is bottom-left or others.
 		virtual void Point_Draw(POS,COLOR);							// Draw a Point on POS with a COLOR.
 		virtual void Line_Draw(POS,POS,COLOR);						// Draw a line from POS to POS with a COLOR.
 		virtual void Rect_Draw(POS,SIZE,COLOR);
