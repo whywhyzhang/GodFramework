@@ -11,7 +11,7 @@ OBJECT = ../../God.o ../../G_World.o ../../G_Object.o ../../G_Input.o ../../G_Ou
 		 Calcula.o main.o
 
 test : $(OBJECT)
-	$(CC) $(CFLAGS) $(OBJECT) $(CINCLUDE) $(LFLAGS) -o tool
+	$(CC) $(CFLAGS) $(OBJECT) $(CINCLUDE) $(LFLAGS) -o calculator
 
 $(OBJECT) : ../../God.h ../../G_Config.h ../../G_Object.h ../../G_World.h
 L_Input.o : ../../L_Input.h ../../G_Input.h
@@ -25,4 +25,4 @@ Calcula.o : Calcula.h
 
 .PHONY : clean
 clean :
-	-rm tool $(OBJECT)
+	-rm calculator $(OBJECT)
