@@ -16,6 +16,7 @@ class Temp : public G_Sprit
 	public:
 		int num;
 		S_Label *lab;
+		L_Clock *clo;
 		Temp()
 		{
 			lab=0;
@@ -27,7 +28,7 @@ class Temp : public G_Sprit
 		{
 			cerr<<"haha\n";
 			if(lab)
-				(*lab)+=string("q");
+				(*lab)-=3;
 	//		cerr<<"haha\n";
 	//		MESSAGE mes;
 	//		Message_Process(&mes);
@@ -37,7 +38,9 @@ class Temp : public G_Sprit
 };
 
 int Temp::Message_Process(const MESSAGE *mes)
-{			
+{
+	static int cou[10]={};
+	
 	switch(mes->type)
 	{
 		case M_MOU_PRE:
@@ -57,6 +60,12 @@ int Temp::Message_Process(const MESSAGE *mes)
 		case M_EXPOSE:
 			p_world->Message_Send(MESSAGE{M_PAINT});
 			break;
+		case M_TIM_PER:
+			cerr<<mes->num[0]<<' '<<++cou[mes->num[0]]<<endl;
+			
+			if(cou[mes->num[0]]>=10)
+				clo->Event_Delete(EVENT{M_TIM_PER,mes->num[0]});
+			break;
 		default:
 			break;
 	}
@@ -73,7 +82,7 @@ int main()
 	E_2Dto2D *eye=new E_2Dto2D;
 	
 	but->Text_Set("Button");
-	lab->Text_Set("asdfg");
+	lab->Text_Set("asdfgqwert");
 
 	p_temp->lab=lab;
 
@@ -100,6 +109,16 @@ int main()
 	p_world->Message_Process_Register(M_MOU_PRE,p_temp->Obj_Num_Get());
 
 	p_world->Message_Process_Register(M_EXPOSE,p_temp->Obj_Num_Get());
+	
+/*	L_Clock *clo=new L_Clock();
+	clo->Event_Register(EVENT{M_TIM_PER,1,0,500000});
+	//clo->Event_Register(EVENT{M_TIM_PER,2,0,1000000});
+	//clo->Event_Register(EVENT{M_TIM_PER,3,0,100000});
+	clo->Event_Register(EVENT{M_TIM_PER,1,0,100000});
+	p_world->Object_Register(clo);
+	p_temp->clo=clo;
+	
+	p_world->Message_Process_Register(M_TIM_PER,p_temp->Obj_Num_Get());*/
 
 	god.Run();
 

@@ -1,0 +1,1 @@
+g++    -c -o L_Input.o L_Input.cpp

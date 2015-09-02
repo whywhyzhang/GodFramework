@@ -47,6 +47,12 @@ void S_Button::Button_Draw()
 	}
 }
 
+void S_Button::Click_Process(int button)
+{
+	if(fun_rem[button])
+		(*fun_rem[button])();
+}
+
 int S_Button::Message_Process(const MESSAGE *mes)
 {
 	switch(mes->type)
@@ -71,8 +77,8 @@ int S_Button::Message_Process(const MESSAGE *mes)
 			}
 			break;
 		case M_MOU_PRE:
-			if(mou_on && fun_rem[mes->num[0]])
-				(*fun_rem[mes->num[0]])();
+			if(mou_on)
+				Click_Process(mes->num[0]);
 			break;
 		default:
 			break;

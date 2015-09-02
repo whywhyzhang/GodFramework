@@ -6,6 +6,7 @@
 
 #include <X11/Xlib.h>
 #include <cstring>
+#include <sys/time.h>
 
 #include "L_Input.h"
 
@@ -150,20 +151,102 @@ bool L_Key_Mou_Win::Key_State_Judge(int key)
 /////////////////////////////////////////////////////////////
 // The function of L_Clock.
 
+bool L_Clock::Time_Cmp::operator () (const STR_TIME * a, const STR_TIME * b)
+{
+	return (*b) < (*a);
+}
+
+bool L_Clock::Num_Cmp::operator () (const STR_TIME * a, const STR_TIME * b)
+{
+	return a->num < b->num;
+}
+
 L_Clock::L_Clock()
-{}
+{
+	while(!time_que.empty())
+		time_que.pop();
+	time_rem.clear();
+}
 
 L_Clock::~L_Clock()
-{}
+{
+	TIME_ITER iter;
+	for(iter=time_rem.begin();iter!=time_rem.end();++iter)
+		if(*iter)
+			delete (*iter);
+}
 
 bool L_Clock::Event_Register(const EVENT &event)
-{}
+{
+	if(event.type==M_TIM_PER)
+	{			
+		STR_TIME * p_temp = new STR_TIME(event.num[0],0,0,event.num[1],event.num[2]);
+		
+		if(time_rem.find(p_temp)!=time_rem.end())
+		{
+			delete p_temp;
+			return 0;
+		}
+		
+		timeval t;
+		gettimeofday(&t,0);
+		p_temp->sec=t.tv_sec;
+		p_temp->usec=t.tv_usec;
+
+		time_rem.insert(p_temp);
+		time_que.push(p_temp);
+
+		return 1;
+	}
+
+	return 0;
+}
 
 bool L_Clock::Event_Delete(const EVENT &event)
-{}
+{
+	if(event.type==M_TIM_PER)
+	{
+		STR_TIME temp(event.num[0],0,0,0,0);
+		TIME_ITER iter=time_rem.find(&temp);
+
+		if(iter==time_rem.end())
+			return 0;
+
+		(*iter)->is_use=0;
+		time_rem.erase(iter);
+
+		return 1;
+	}
+
+	return 0;
+}
 
 void L_Clock::Event_Happend()
-{}
+{
+	timeval temp;
+	gettimeofday(&temp,0);
+	STR_TIME *p;
+	
+	while(!time_que.empty())
+	{
+		p=time_que.top();
+
+		if(p->is_use==0)
+		{
+			time_que.pop();
+			delete p;
+			continue;
+		}
+
+		if(temp.tv_sec < p->sec || (temp.tv_sec == p->sec && temp.tv_usec < p->usec))
+			break;
+
+		time_que.pop();
+		p_world->Message_Send(MESSAGE{M_TIM_PER,p->num,p->sec,p->usec,p->sec_per,p->usec_per});
+		if(p->add())
+			time_que.push(p);
+	}
+}
 
 int L_Clock::Message_Process(const MESSAGE *mes)
 {}

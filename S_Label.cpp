@@ -124,6 +124,20 @@ const char * S_Label::operator += (const string & str)
 	return text.data();
 }
 
+const char * S_Label::operator -= (int num)
+{
+	int len=text.length();
+	if(len-num>=0)
+		text.erase(len-num);
+	else
+		text.clear();
+	
+	if(p_world)
+		p_world->Message_Send(MESSAGE{M_PAINT});
+	
+	return text.data();
+}
+
 const char * S_Label::Text_Get() const
 {
 	return text.data();

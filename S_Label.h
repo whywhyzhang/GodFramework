@@ -31,6 +31,7 @@ class S_Label : public G_Sprit
 		void Text_Set(char *);
 		void Out_Type_Set(int);
 		const char * operator += (const string &);				// Add a string to text;
+		const char * operator -= (int);
 		
 		const char * Text_Get() const;
 };

@@ -19,6 +19,7 @@ using std::set;
 using std::vector;
 using std::pair;
 using std::multimap;
+using std::multiset;
 
 class G_Object;
 class G_Input;
@@ -47,6 +48,62 @@ typedef int KEY_STA;
 
 // Config about mouse.
 const int MOU_BUTTON_NUM=4;
+
+// Config about time.
+const int USEC_PER_SEC=1000000;
+struct STR_TIME
+{
+	long sec,usec;
+	long sec_per,usec_per;				// The period of time point.
+	bool is_use;
+	int num;
+	
+	STR_TIME(int n=0,long a=0,long b=0,long c=0,long long d=0)
+	{
+		num=n;
+		is_use=1;
+		sec=a;
+		usec=b;
+		sec_per=c;
+		usec_per=d;
+		
+		if(usec>=USEC_PER_SEC)
+		{
+			sec+=usec/USEC_PER_SEC;
+			usec%=USEC_PER_SEC;
+		}
+		
+		if(usec_per>=USEC_PER_SEC)
+		{
+			sec_per+=usec_per/USEC_PER_SEC;
+			usec_per%=USEC_PER_SEC;
+		}
+	}
+	
+	bool operator < (const STR_TIME & b) const
+	{
+		if(sec==b.sec)
+			return usec<b.usec;
+		return sec<b.sec;
+	}
+	
+	bool add()
+	{
+		if(sec_per<0 || usec_per<0)
+			return 0;
+		
+		usec+=usec_per;
+		sec+=sec_per;
+		
+		if(usec>=USEC_PER_SEC)
+		{
+			sec+=usec/USEC_PER_SEC;
+			usec%=USEC_PER_SEC;
+		}
+		
+		return 1;
+	}
+};
 
 // Config about fonts.
 const char * const DEFAULT_FONT="r16";
@@ -126,6 +183,8 @@ const MES_TYPE M_KEY_REL=101;
 const MES_TYPE M_MOU_PRE=102;
 const MES_TYPE M_MOU_REL=103;
 const MES_TYPE M_MOU_MOV=104;
+
+const MES_TYPE M_TIM_PER=110;
 
 // Output message type:
 const MES_TYPE M_EXPOSE =200;

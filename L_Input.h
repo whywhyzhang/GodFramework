@@ -12,11 +12,16 @@
 */
 
 #include <X11/Xlib.h>
+#include <queue>
+#include <functional>
 
 #include "L_Config.h"
 
 #include "G_Input.h"
 #include "God.h"
+
+using std::priority_queue;
+using std::less;
 
 // The class about keyboard and mouse
 class L_Key_Mou_Win:public G_Input
@@ -46,7 +51,23 @@ class L_Key_Mou_Win:public G_Input
 class L_Clock:public G_Input
 {
 	private:
-		struct timeval time_start;
+		class Time_Cmp
+		{
+			public:
+				bool operator () (const STR_TIME *, const STR_TIME *);
+		};
+		
+		class Num_Cmp
+		{
+			public:
+				bool operator () (const STR_TIME *, const STR_TIME *);
+		};
+
+	private:
+		priority_queue <STR_TIME *,vector<STR_TIME *>,Time_Cmp> time_que;
+		set <STR_TIME *,Num_Cmp> time_rem;
+		
+		typedef set <STR_TIME *,Num_Cmp> ::iterator TIME_ITER;
 
 	public:
 		L_Clock();

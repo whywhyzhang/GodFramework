@@ -25,6 +25,7 @@ class S_Button : public G_Sprit
 		~S_Button();
 
 		virtual void Button_Draw();
+		virtual void Click_Process(int);
 
 		int  Message_Process(const MESSAGE *);
 		bool Process_Register();
