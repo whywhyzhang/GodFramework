@@ -140,7 +140,9 @@ void L_Key_Mou_Win::Event_Happend()
 }
 
 int L_Key_Mou_Win::Message_Process(const MESSAGE *mes)
-{}
+{
+	return 0;
+}
 
 bool L_Key_Mou_Win::Key_State_Judge(int key)
 {
@@ -249,4 +251,6 @@ void L_Clock::Event_Happend()
 }
 
 int L_Clock::Message_Process(const MESSAGE *mes)
-{}
+{
+	return 0;
+}

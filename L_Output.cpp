@@ -87,6 +87,8 @@ int L_Monitor::Message_Process(const MESSAGE *mes)
 		default:
 			break;
 	}
+	
+	return 0;
 }
 
 void L_Monitor::PicBuffer_Show()
@@ -263,7 +265,6 @@ L_Audio::~L_Audio()
 {}
 
 int L_Audio::Message_Process(const MESSAGE *mes)
-{}
-
-int L_Audio::Message_Process(const MESSAGE &mes)
-{}
+{
+	return 0;
+}

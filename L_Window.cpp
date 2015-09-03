@@ -60,8 +60,17 @@ L_Window::L_Window(char *xsever,POS start,SIZE size,COLOR background)
 L_Window::~L_Window()
 {
 	--win_cou;
-	//XDestroyWindow(xlib_dis,xlib_win);
-	if(win_cou==0) XCloseDisplay(xlib_dis);
+	XDestroyWindow(xlib_dis,xlib_win);
+	if(win_cou==0)
+	{
+		XCloseDisplay(xlib_dis);
+		xlib_dis=0;
+	}
+}
+
+void L_Window::Window_Close()
+{
+	XUnmapWindow(xlib_dis,xlib_win);
 }
 
 bool L_Window::Window_Show() const

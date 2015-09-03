@@ -81,6 +81,8 @@ int E_2Dto2D::Message_Process(const MESSAGE *mes)
 		default:
 			break;
 	}
+	
+	return 0;
 }
 
 bool E_2Dto2D::InRange(G_Sprit *p_spr)

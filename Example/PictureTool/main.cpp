@@ -35,7 +35,9 @@ class PicDraw : public G_Sprit
 		}
 
 		int Message_Process(const MESSAGE *mes)
-		{}
+		{
+			return 0;
+		}
 };
 
 int main(int argc,char **argv)

@@ -60,7 +60,6 @@ class L_Audio:public G_Output
 		~L_Audio();
 
 		virtual int Message_Process(const MESSAGE *);
-		virtual int Message_Process(const MESSAGE &);
 };
 
 #endif

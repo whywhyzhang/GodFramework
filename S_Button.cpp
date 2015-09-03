@@ -47,14 +47,18 @@ void S_Button::Button_Draw()
 	}
 }
 
-void S_Button::Click_Process(int button)
+int S_Button::Click_Process(int button)
 {
 	if(fun_rem[button])
-		(*fun_rem[button])();
+		return (*fun_rem[button])(obj_num);
+		
+	return 0;
 }
 
 int S_Button::Message_Process(const MESSAGE *mes)
 {
+	int temp;
+	
 	switch(mes->type)
 	{
 		case M_MOU_MOV:
@@ -78,11 +82,14 @@ int S_Button::Message_Process(const MESSAGE *mes)
 			break;
 		case M_MOU_PRE:
 			if(mou_on)
-				Click_Process(mes->num[0]);
+				if(temp=Click_Process(mes->num[0]))
+					return temp;
 			break;
 		default:
 			break;
 	}
+	
+	return 0;
 }
 
 bool S_Button::Process_Register()
@@ -109,7 +116,7 @@ void S_Button::Text_Set(char * s)
 		p_world->Message_Send(MESSAGE{M_PAINT});			// Maybe need.
 }
 
-bool S_Button::Function_Register(G_Object * p_obj,int t)
+bool S_Button::Function_Register(G_Sprit * p_obj,int t)
 {
 	if(t>=MOU_BUTTON_NUM || t<0) return 0;
 	if(fun_rem[t]) return 0;
@@ -118,7 +125,7 @@ bool S_Button::Function_Register(G_Object * p_obj,int t)
 	return 1;
 }
 
-bool S_Button::Function_Register(G_Object & p_obj,int t)
+bool S_Button::Function_Register(G_Sprit & p_obj,int t)
 {
 	Function_Register(&p_obj,t);
 }

@@ -92,7 +92,9 @@ void S_Label::Label_Draw()
 }
 
 int S_Label::Message_Process(const MESSAGE *)
-{}
+{
+	return 0;
+}
 
 bool S_Label::Process_Register()
 {}

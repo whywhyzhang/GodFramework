@@ -28,10 +28,11 @@ class G_World
 
 	private:
 		queue <const MESSAGE *> world_mes_que;								// Message coming from other world. Maybe Multi thread there.
+		set <G_World *> other_world_rem;									// Remember other world that this world can send message to.
 
 	private:
 		void Event_Happend();
-		void Message_Process(const MESSAGE *);								// Process a message.
+		int  Message_Process(const MESSAGE *);								// Process a message.
 
 	public:
 		G_World();
@@ -43,15 +44,21 @@ class G_World
 		int Run();
 		
 	public:
-		void Message_Process_Register(MES_TYPE,OBJECT_NUM);			// Register a process object about a message.
-		bool Message_Process_Delete(MES_TYPE,OBJECT_NUM);			// Delete a relationship about Message and Object.
+		void Message_Process_Register(MES_TYPE,OBJECT_NUM);					// Register a process object about a message.
+		bool Message_Process_Delete(MES_TYPE,OBJECT_NUM);					// Delete a relationship about Message and Object.
 		void Message_Delete(MES_TYPE);
-		void Message_Send(const MESSAGE &);							// Send a message to message queue.
+		void Message_Send(const MESSAGE &);									// Send a message to message queue.
 
-		bool Object_Register(G_Object *);							// Register a object.
-		bool Object_Delete(const OBJECT_NUM);						// Delete a object according to his num.
+		bool Object_Register(G_Object *);									// Register a object.
+		bool Object_Delete(const OBJECT_NUM);								// Delete a object according to his num.
 		
-		void Visual_Change(OBJECT_NUM,bool);						// Change the visual of Object.
+		void Visual_Change(OBJECT_NUM,bool);								// Change the visual of Object.
+		
+	public:
+		void World_Message_Send(const MESSAGE &);							// Send a message from other world.
+		
+		void Other_World_Register(G_World *);
+		bool Other_World_Delete(G_World *);
 };
 
 #endif

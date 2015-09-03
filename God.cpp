@@ -12,8 +12,10 @@ God::God()
 God::~God()
 {
 	WORLD_ITER iter;
+	
 	for(iter=world_rem.begin();iter!=world_rem.end();++iter)
 	{
+		(iter->second)->God_Set(0);					// !!!
 		delete iter->second;
 		iter->second=0;
 	}

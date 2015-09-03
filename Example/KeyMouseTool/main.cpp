@@ -61,6 +61,8 @@ class Func : public G_Sprit
 				default:
 					break;
 			}
+			
+			return 0;
 		}
 
 		bool Process_Register()
@@ -75,7 +77,7 @@ int main()
 {
 	God god;
 
-	G_World *p_world = new G_World;
+	G_World * p_world = new G_World;
 	god.World_Register(p_world);
 
 	L_Window win(POS(10,10),SIZE(700,500));

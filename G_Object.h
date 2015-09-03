@@ -25,15 +25,15 @@ class G_Object
 		G_Object(OBJECT_TYPE,bool);
 		virtual ~G_Object()=0;
 
-		virtual int Message_Process(const MESSAGE *)=0;		// Process a message.
-		virtual void operator () ();
+		virtual int  Message_Process(const MESSAGE *)=0;	// Process a message.
 		virtual bool Process_Register();					// Register the specifical Message Process of this object.
 		
 		int Message_Process(const MESSAGE &);
 		
 		virtual void Redraw();
 		
-		bool World_Register(G_World *);							// Regeister a god to this object.
+		bool World_Register(G_World *);						// Regeister a god to this object.
+		void World_Clear();
 		void Register_To_World(G_World *);
 		G_World * World_Get() const;
 		OBJECT_NUM Obj_Num_Get() const;

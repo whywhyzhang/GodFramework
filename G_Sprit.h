@@ -19,6 +19,7 @@ class G_Sprit : public G_Object
 		~G_Sprit();
 		
 		virtual int Message_Process(const MESSAGE *)=0;
+		virtual int operator () (int);
 		
 		POS Pos_Get() const;
 		SIZE Size_Get() const;

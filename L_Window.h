@@ -30,6 +30,7 @@ class L_Window
 		~L_Window();
 
 		bool Window_Show() const;
+		void Window_Close();
 
 		L_Key_Mou_Win * Get_KeyMouse_Pointer() const;
 		L_Monitor * Get_Monitor_Pointer() const;

@@ -26,10 +26,10 @@ Cal_But::Cal_But(char c,Cal_Lab * plab,POS p,SIZE s,char *str,int pri) \
 	lab=plab;
 }
 
-void Cal_But::Click_Process(int num)
+int Cal_But::Click_Process(int num)
 {
-	if(num!=1) return;
-	if(lab==0) return;
+	if(num!=1) return 0;
+	if(lab==0) return 0;
 
 	if(isNum(ch) || ch=='.' || ch=='(' || ch==')')
 	{
@@ -96,6 +96,8 @@ void Cal_But::Click_Process(int num)
 			lab->State_Set(0);
 		}
 	}
+	
+	return 0;
 }
 
 double Cal_But::Cal_Ans(const char *str,int x,int y,int &error)

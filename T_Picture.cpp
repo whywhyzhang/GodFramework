@@ -138,4 +138,6 @@ const unsigned char * T_JPEG::Pic_Buf_Get() const
 }
 
 int T_JPEG::Message_Process(const MESSAGE *mes)
-{}
+{
+	return 0;
+}

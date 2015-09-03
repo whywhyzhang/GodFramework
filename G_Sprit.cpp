@@ -10,6 +10,11 @@ G_Sprit::G_Sprit():G_Object(OBJ_SPR,1)
 G_Sprit::~G_Sprit()
 {}
 
+int G_Sprit::operator () (int obj_num)
+{
+	return 0;
+}
+
 POS G_Sprit::Pos_Get() const
 {
 	return spr_p;

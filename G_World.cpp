@@ -17,6 +17,8 @@ G_World::G_World()
 	for(int i=0;i<OBJ_KIND;++i)	obj_type_rem[i].clear();
 	obj_rem.clear();
 	mes_obj_rem.clear();
+	
+	other_world_rem.clear();
 }
 
 G_World::~G_World()
@@ -25,8 +27,12 @@ G_World::~G_World()
 		p_god->World_Delete(world_num);
 
 	OBJ_ITER iter;
+	OBJECT_TYPE type_temp;
 	for(iter=obj_rem.begin();iter!=obj_rem.end();++iter)
 	{
+		(iter->second)->World_Clear();					// !!!
+		type_temp=(iter->second)->Obj_Type_Get();
+		obj_type_rem[type_temp].erase((iter->second)->Obj_Num_Get());				// !!!
 		delete (*iter).second;
 		(*iter).second=0;
 	}
@@ -35,6 +41,12 @@ G_World::~G_World()
 	{
 		delete mes_que.front();				// For some compliers this will be error. Because they don't think that const pointer can be delete.
 		mes_que.pop();
+	}
+	
+	while(!world_mes_que.empty())
+	{
+		delete world_mes_que.front();
+		world_mes_que.pop();
 	}
 }
 
@@ -56,6 +68,7 @@ WORLD_NUM G_World::World_Num_Get() const
 int G_World::Run()
 {
 	const MESSAGE *p_temp;
+	int temp;
 	
 	Event_Happend();
 
@@ -66,7 +79,8 @@ int G_World::Run()
 		p_temp=mes_que.front();
 		mes_que.pop();
 
-		Message_Process(p_temp);
+		if(temp=Message_Process(p_temp))
+			return temp;
 	}
 
 	while(!world_mes_que.empty())
@@ -74,7 +88,8 @@ int G_World::Run()
 		p_temp=world_mes_que.front();
 		world_mes_que.pop();
 
-		Message_Process(p_temp);
+		if(temp=Message_Process(p_temp))
+			return temp;
 	}
 
 	return 0;
@@ -88,18 +103,22 @@ void G_World::Event_Happend()
 		((G_Input *)(*iter).second)->Event_Happend();
 }
 
-void G_World::Message_Process(const MESSAGE *mes)
+int G_World::Message_Process(const MESSAGE *mes)
 {
 	pair <MES_ITER,MES_ITER> temp=mes_obj_rem.equal_range(mes->type);
 	MES_ITER iter;
 	OBJ_ITER obj;
+	int ret_temp;
 
 	for(iter=temp.first;iter!=temp.second;++iter)
 	{
 		obj=obj_rem.find((*iter).second);
 		if(obj!=obj_rem.end())
-			(*obj).second->Message_Process(mes);
+			if(ret_temp=((*obj).second->Message_Process(mes)))
+				return ret_temp;
 	}
+	
+	return 0;
 }
 
 void G_World::Message_Process_Register(MES_TYPE mes,OBJECT_NUM num)
@@ -139,8 +158,17 @@ void G_World::Message_Send(const MESSAGE &mes)
 	mes_que.push(temp);
 }
 
+void G_World::World_Message_Send(const MESSAGE &mes)
+{
+	MESSAGE *temp=new MESSAGE(mes);
+	world_mes_que.push(temp);
+}
+
 bool G_World::Object_Register(G_Object * p_obj)
 {
+	if(p_obj->World_Get())					/////
+		return 0;
+
 	typedef pair <OBJECT_NUM,G_Object *> pii;
 
 	OBJECT_TYPE obj_type=p_obj->Obj_Type_Get();
@@ -176,7 +204,7 @@ void G_World::Visual_Change(OBJECT_NUM num, bool type)
 	G_Eye *p;
 	
 	for(iter_eye=obj_type_rem[OBJ_EYE].begin();iter_eye!=obj_type_rem[OBJ_EYE].end();++iter_eye)
-	{
+	{		
 		p=(G_Eye *)(iter_eye->second);
 		
 		if(type)
@@ -184,4 +212,14 @@ void G_World::Visual_Change(OBJECT_NUM num, bool type)
 		else
 			p->Object_Delete((G_Sprit *)iter->second);
 	}
+}
+
+void G_World::Other_World_Register(G_World * p)
+{
+	other_world_rem.insert(p);
+}
+
+bool G_World::Other_World_Delete(G_World * p)
+{
+	return other_world_rem.erase(p);
 }

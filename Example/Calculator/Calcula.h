@@ -36,7 +36,7 @@ class Cal_But : public S_Button
 	public:
 		Cal_But(char=0,Cal_Lab * =0,POS=POS(0,0),SIZE=SIZE(100,50),char * =0,int=0);
 
-		void Click_Process(int);
+		int  Click_Process(int);
 };
 
 void Window_Init(L_Window &);

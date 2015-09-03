@@ -34,6 +34,13 @@ bool G_Object::World_Register(G_World *poi)
 	return 1;
 }
 
+void G_Object::World_Clear()
+{
+	if(p_world && is_vis)
+		p_world->Visual_Change(obj_num,0);				/////
+	p_world=0;
+}
+
 bool G_Object::Process_Register()
 {}
 
@@ -41,9 +48,6 @@ void G_Object::Register_To_World(G_World *poi)
 {
 	poi->Object_Register(this);
 }
-
-void G_Object::operator () ()
-{}
 
 int G_Object::Message_Process(const MESSAGE & temp)
 {

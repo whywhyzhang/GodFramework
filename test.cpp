@@ -24,11 +24,14 @@ class Temp : public G_Sprit
 			spr_size=SIZE(10,10);
 		}
 		int Message_Process(const MESSAGE *);
-		void operator () ()
+		int operator () (int num)
 		{
+			//return 1230;
 			cerr<<"haha\n";
 			if(lab)
 				(*lab)-=3;
+				
+			return 0;
 	//		cerr<<"haha\n";
 	//		MESSAGE mes;
 	//		Message_Process(&mes);
@@ -69,6 +72,8 @@ int Temp::Message_Process(const MESSAGE *mes)
 		default:
 			break;
 	}
+	
+	return 0;
 }
 
 int main()
@@ -120,7 +125,7 @@ int main()
 	
 	p_world->Message_Process_Register(M_TIM_PER,p_temp->Obj_Num_Get());*/
 
-	god.Run();
+	cerr<<god.Run()<<endl;
 
 	return 0;
 }
