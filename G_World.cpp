@@ -166,6 +166,8 @@ void G_World::World_Message_Send(const MESSAGE &mes)
 
 bool G_World::Object_Register(G_Object * p_obj)
 {
+	if(!p_obj) return 0;
+	
 	if(p_obj->World_Get())					/////
 		return 0;
 
@@ -216,6 +218,8 @@ void G_World::Visual_Change(OBJECT_NUM num, bool type)
 
 void G_World::Other_World_Register(G_World * p)
 {
+	if(!p) return;
+	
 	other_world_rem.insert(p);
 }
 

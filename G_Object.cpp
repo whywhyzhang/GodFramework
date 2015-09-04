@@ -26,6 +26,7 @@ G_Object::~G_Object()
 
 bool G_Object::World_Register(G_World *poi)
 {
+	if(!poi) return 0;
 	if(p_world) return 0;
 
 	p_world=poi;

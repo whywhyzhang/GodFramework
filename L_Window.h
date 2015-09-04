@@ -37,6 +37,15 @@ class L_Window
 		
 		bool Event_Register(const EVENT &);
 		void Register_To_World(G_World *);
+		
+	private:
+		static int get_byte_order ();
+		
+	public:
+		static bool T_PicBuf_To_Image(const unsigned char *,SIZE,void *&);
+		static bool T_Xpm_To_Image(const char *,void *);
+		
+		static bool T_Image_Destroy(void *);
 };
 
 #endif

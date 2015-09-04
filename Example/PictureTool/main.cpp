@@ -13,23 +13,34 @@ class PicDraw : public G_Sprit
 	private:
 		SIZE pic_size;
 		POS pic_pos;
-		const unsigned char *pic_buf;
+		void *pic_buf;
+		int type;
 
 	public:
 		PicDraw(POS pos=POS(0,0)):pic_pos(pos)
 		{
 			pic_buf=0;
+			type=0;
 		}
 
 		void Picture_Set(const unsigned char * p,SIZE s)
 		{
-			pic_buf=p;
+			pic_buf=(void *)p;
 			pic_size=s;
+			type=1;
+		}
+		
+		void Image_Set(const unsigned char * p,SIZE s)
+		{
+			L_Window::T_PicBuf_To_Image(p,s,pic_buf);
+			
+			pic_size=s;
+			type=0;
 		}
 
 		void Redraw()
 		{
-			MESSAGE mes={M_PIC_DRW,0,0,pic_size.w,pic_size.h};
+			MESSAGE mes={M_PIC_DRW,0,0,pic_size.w,pic_size.h,type};
 			mes.p=(void *)pic_buf;
 			p_world->Message_Send(mes);
 		}
@@ -42,9 +53,9 @@ class PicDraw : public G_Sprit
 
 int main(int argc,char **argv)
 {
-	if(argc<2)
+	if(argc<3)
 	{
-		std::cerr<<"Please input the name of picture!\n";
+		std::cerr<<"Please input the name of picture and the paint type(1 is Point Draw & 2 is Image Draw)!\n";
 		return 1;
 	}
 
@@ -64,9 +75,14 @@ int main(int argc,char **argv)
 
 	T_JPEG * picbuf = new T_JPEG;
 	picbuf->Jpg_Open(argv[1]);
-
+	
 	PicDraw * pic = new PicDraw;
-	pic->Picture_Set(picbuf->Pic_Buf_Get(),picbuf->Size_Get());
+	
+	if(argv[2][0]=='1')
+		pic->Picture_Set(picbuf->Pic_Buf_Get(),picbuf->Size_Get());
+	else if(argv[2][0]=='2')
+		pic->Image_Set(picbuf->Pic_Buf_Get(),picbuf->Size_Get());
+
 	p_world->Object_Register(pic);
 
 	god.Run();

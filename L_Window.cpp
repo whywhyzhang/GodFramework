@@ -2,6 +2,17 @@
 	This is a class about X window.
 */
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#include <X11/keysym.h>
+#include <jpeglib.h>
+#include <jerror.h>
+
 #include "L_Window.h"
 
 Display * L_Window::xlib_dis=0;
@@ -98,4 +109,121 @@ void L_Window::Register_To_World(G_World * p)
 {
 	p_win_keymouse->Register_To_World(p);
 	p_win_monitor->Register_To_World(p);
+}
+
+int L_Window::get_byte_order ()
+{
+	union
+	{
+		char c[sizeof(short)];
+		short s;
+	} order;
+
+	order.s = 1;
+	if ((1 == order.c[0]))
+		return LSBFirst;
+	else
+		return MSBFirst;
+}	
+
+bool L_Window::T_PicBuf_To_Image(const unsigned char * buf, SIZE size, void * &ret)
+{
+	if(xlib_dis==0 || buf==0)
+		return 0;
+		
+	int depth;
+	XImage *img = 0;
+	Visual *vis;
+	double rRatio;
+	double gRatio;
+	double bRatio;
+	int outIndex = 0;	
+	int i;
+	int numBufBytes = (3 * (size.w * size.h));
+	int screen=DefaultScreen(xlib_dis);
+		
+	depth = DefaultDepth (xlib_dis, screen);
+	vis = DefaultVisual (xlib_dis, screen);
+
+	rRatio = vis->red_mask / 255.0;
+	gRatio = vis->green_mask / 255.0;
+	bRatio = vis->blue_mask / 255.0;
+		
+	if (depth >= 24)
+	{
+		size_t numNewBufBytes = (4 * (size.w * size.h));
+		unsigned int * newBuf = new unsigned int [numNewBufBytes];
+	
+		for (i = 0; i < numBufBytes; ++i)
+		{
+			unsigned int r, g, b;
+			r = (buf[i] * rRatio);
+			++i;
+			g = (buf[i] * gRatio);
+			++i;
+			b = (buf[i] * bRatio);
+					
+			r &= vis->red_mask;
+			g &= vis->green_mask;
+			b &= vis->blue_mask;
+			
+			newBuf[outIndex] = r | g | b;
+			++outIndex;
+		}
+		
+		img = XCreateImage (xlib_dis, CopyFromParent, depth, ZPixmap, 0, (char *) newBuf, size.w, size.h, 32, 0);
+	}
+	else if (depth >= 15)
+	{
+		size_t numNewBufBytes = (2 * (size.w * size.h));
+		unsigned short * newBuf = new unsigned short [numNewBufBytes];
+		
+		for (i = 0; i < numBufBytes; ++i)
+		{
+			unsigned int r, g, b;
+
+			r = (buf[i] * rRatio);
+			++i;
+			g = (buf[i] * gRatio);
+			++i;
+			b = (buf[i] * bRatio);
+					
+			r &= vis->red_mask;
+			g &= vis->green_mask;
+			b &= vis->blue_mask;
+			
+			newBuf[outIndex] = r | g | b;
+			++outIndex;
+		}
+		
+		img = XCreateImage (xlib_dis, CopyFromParent, depth, ZPixmap, 0, (char *) newBuf, size.w, size.h, 16, 0);
+	}
+	else
+		return 0;
+
+	XInitImage (img);
+	
+	if ((LSBFirst == get_byte_order ()))
+		img->byte_order = LSBFirst;
+	else
+		img->byte_order = MSBFirst;
+	img->bitmap_bit_order = MSBFirst;
+	
+	ret=(void *)img;
+
+	return 1;
+}
+
+bool L_Window::T_Xpm_To_Image(const char * buf, void * ret)
+{
+}
+
+bool L_Window::T_Image_Destroy(void * p)
+{
+	if(p==0)
+		return 0;
+	
+	XDestroyImage((XImage *)p);
+	
+	return 1;
 }

@@ -45,7 +45,7 @@ class L_Monitor:public G_Output
 		virtual void Rect_Draw(POS,SIZE,COLOR);
 		virtual void Circle_Draw(POS,int,int,double,double,COLOR);	// Draw a circle(or oval) on POS with Rx and Ry and a COLOR, start from double1, has a angle of double2(Counterclockwise,0-360).
 		virtual void Rect_Fill_Draw(POS,SIZE,COLOR);				// Draw a Rectangle and fill it, form POS with a SIZE, with COLOR.
-		virtual void Picture_Draw(POS,SIZE,unsigned char *);		// Draw a picture(char buffer) in POS with a SIZE.
+		virtual void Picture_Draw(POS,SIZE,bool,unsigned char *);		// Draw a picture(char buffer) in POS with a SIZE.
 		
 		void Register_To_World(G_World *);
 };

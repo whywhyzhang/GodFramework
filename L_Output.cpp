@@ -82,7 +82,7 @@ int L_Monitor::Message_Process(const MESSAGE *mes)
 			Rect_Fill_Draw(POS(num[0],num[1]),SIZE(num[2],num[3]),num[4]);
 			break;
 		case M_PIC_DRW:
-			Picture_Draw(POS(num[0],num[1]),SIZE(num[2],num[3]),(unsigned char *)mes->p);
+			Picture_Draw(POS(num[0],num[1]),SIZE(num[2],num[3]),num[4],(unsigned char *)mes->p);
 			break;
 		default:
 			break;
@@ -219,22 +219,30 @@ void L_Monitor::Rect_Fill_Draw(POS pos,SIZE size,COLOR col)
 	XFillRectangle(p_xlib_dis,xlib_pixmap,xlib_gc,pos.x,pos.y,size.w,size.h);
 }
 
-void L_Monitor::Picture_Draw(POS p,SIZE s,unsigned char *buf)
+void L_Monitor::Picture_Draw(POS p,SIZE s,bool point_draw,unsigned char *buf)
 {
-	COLOR temp;
-	int cou=0;
-	POS dp=p;
+	if(buf==0)
+		return;
+		
+	if(point_draw)
+	{
+		COLOR temp;
+		int cou=0;
+		POS dp=p;
 
-	for(int i=0;i<s.h;++dp.y,++i,dp.x=p.x)
-		for(int j=0;j<s.w;++dp.x,++j)
-		{
-			temp=buf[cou++]<<16;
-			temp|=buf[cou++]<<8;
-			temp|=buf[cou++];
+		for(int i=0;i<s.h;++dp.y,++i,dp.x=p.x)
+			for(int j=0;j<s.w;++dp.x,++j)
+			{
+				temp=buf[cou++]<<16;
+				temp|=buf[cou++]<<8;
+				temp|=buf[cou++];
 
-			if(temp!=TRANS_COLOR)
-				Point_Draw(dp,temp);
-		}
+				if(temp!=TRANS_COLOR)
+					Point_Draw(dp,temp);
+			}
+	}
+	else
+		XPutImage(p_xlib_dis,xlib_pixmap,xlib_gc,(XImage *)buf,0,0,p.x,p.y,s.w,s.h);
 }
 
 void L_Monitor::Register_To_World(G_World *p_world)

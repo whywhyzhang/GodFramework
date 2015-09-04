@@ -46,8 +46,14 @@ bool Welcome()
 	p_world->Object_Register(eye);
 	p_world->Message_Process_Register(M_EXPOSE,eye->Obj_Num_Get());
 
-	S_Button * but1 = new S_Button(POS(300,140),SIZE(100,50),"Start");
-	S_Button * but2 = new S_Button(POS(300,340),SIZE(100,50),"Exit");
+	T_JPEG * picbuf = new T_JPEG;
+	picbuf->Jpg_Open("Welcome.jpg");
+	S_Image * image = new S_Image;
+	image->Image_Set(picbuf->Pic_Buf_Get(),picbuf->Size_Get());
+	p_world->Object_Register(image);
+
+	S_Button * but1 = new S_Button(POS(300,190),SIZE(100,50),"Start");
+	S_Button * but2 = new S_Button(POS(300,390),SIZE(100,50),"Exit");
 
 	Wel_Func func;
 	func.Register(2,but1->Obj_Num_Get());
@@ -63,7 +69,7 @@ bool Welcome()
 
 bool Game_Run()
 {
-/*	God god;
+	God god;
 
 	L_Window win(POS(100,100),SIZE(700,650));
 	win.Window_Show();
@@ -75,14 +81,20 @@ bool Game_Run()
 	phy_world->Other_World_Register(out_world);
 
 	god.Run();
-*/
+
 	return 0;
 }
 
 G_World * Out_World_Init(God &god,L_Window &win)
 {
+	G_World * p_world = new G_World;
+
+	return p_world;
 }
 
 G_World * Phy_World_Init(God &god)
 {
+	G_World * p_world = new G_World;
+
+	return p_world;
 }
