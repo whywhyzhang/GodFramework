@@ -2,8 +2,8 @@
    	The implement of G_World.
 */
 
-#include "G_World.h"
-#include "God.h"
+#include "../include/G_World.h"
+#include "../include/God.h"
 
 WORLD_NUM G_World::world_cou=0;
 

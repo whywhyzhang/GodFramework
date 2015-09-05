@@ -2,8 +2,8 @@
 	This is the class of linux output.
 */
 
-#include "L_Output.h"
-#include "G_World.h"
+#include "../include/L_Output.h"
+#include "../include/G_World.h"
 
 /////////////////////////////////////////////////////
 // The function of L_Monitor.
@@ -82,7 +82,7 @@ int L_Monitor::Message_Process(const MESSAGE *mes)
 			Rect_Fill_Draw(POS(num[0],num[1]),SIZE(num[2],num[3]),num[4]);
 			break;
 		case M_PIC_DRW:
-			Picture_Draw(POS(num[0],num[1]),SIZE(num[2],num[3]),num[4],(unsigned char *)mes->p);
+			Picture_Draw(POS(num[0],num[1]),POS(num[2],num[3]),SIZE(num[4],num[5]),num[6],(unsigned char *)mes->p);
 			break;
 		default:
 			break;
@@ -219,7 +219,7 @@ void L_Monitor::Rect_Fill_Draw(POS pos,SIZE size,COLOR col)
 	XFillRectangle(p_xlib_dis,xlib_pixmap,xlib_gc,pos.x,pos.y,size.w,size.h);
 }
 
-void L_Monitor::Picture_Draw(POS p,SIZE s,bool point_draw,unsigned char *buf)
+void L_Monitor::Picture_Draw(POS p,POS sp,SIZE s,bool point_draw,unsigned char *buf)
 {
 	if(buf==0)
 		return;
@@ -242,7 +242,7 @@ void L_Monitor::Picture_Draw(POS p,SIZE s,bool point_draw,unsigned char *buf)
 			}
 	}
 	else
-		XPutImage(p_xlib_dis,xlib_pixmap,xlib_gc,(XImage *)buf,0,0,p.x,p.y,s.w,s.h);
+		XPutImage(p_xlib_dis,xlib_pixmap,xlib_gc,(XImage *)buf,sp.x,sp.y,p.x,p.y,s.w,s.h);
 }
 
 void L_Monitor::Register_To_World(G_World *p_world)

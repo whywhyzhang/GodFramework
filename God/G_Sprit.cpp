@@ -2,7 +2,7 @@
 	This is the class about sprit.
 */
 
-#include "G_Sprit.h"
+#include "../include/G_Sprit.h"
 
 G_Sprit::G_Sprit():G_Object(OBJ_SPR,1)
 {}

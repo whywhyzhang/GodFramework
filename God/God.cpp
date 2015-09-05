@@ -2,7 +2,7 @@
 	The implement of class God.
 */
 
-#include "God.h"
+#include "../include/God.h"
 
 God::God()
 {

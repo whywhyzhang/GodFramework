@@ -9,7 +9,7 @@
 #include <jpeglib.h>
 #include <jerror.h>
 
-#include "T_Picture.h"
+#include "../include/T_Picture.h"
 
 
 T_JPEG::T_JPEG()

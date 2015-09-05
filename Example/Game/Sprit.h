@@ -6,14 +6,14 @@
 #include <stdlib.h>
 #include <algorithm>
 
-#include "../../God.h"
-#include "../../L_Window.h"
-#include "../../L_Input.h"
-#include "../../S_Button.h"
-#include "../../S_Label.h"
-#include "../../S_Image.h"
-#include "../../E_2Dto2D.h"
-#include "../../T_Picture.h"
+#include "../../include/God.h"
+#include "../../include/L_Window.h"
+#include "../../include/L_Input.h"
+#include "../../include/S_Button.h"
+#include "../../include/S_Label.h"
+#include "../../include/S_Image.h"
+#include "../../include/E_2Dto2D.h"
+#include "../../include/T_Picture.h"
 
 const MES_TYPE M_ADD=1000;
 const MES_TYPE M_FAIL=1001;
@@ -74,6 +74,7 @@ class Game_But : public S_Button
 	private:
 		int state;
 		int num;
+		S_Image * image;
 		
 		Game_But * neigh[8];
 		
@@ -81,7 +82,7 @@ class Game_But : public S_Button
 		int DFS();
 		
 	public:
-		Game_But(int,POS,SIZE,int=0);
+		Game_But(int,POS,SIZE,S_Image *,int=0);
 		
 		int Click_Process(int);
 		void Button_Draw();

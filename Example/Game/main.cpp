@@ -27,9 +27,15 @@ int main()
 	S_Image * image = new S_Image;
 	image->Image_Set(picbuf->Pic_Buf_Get(),picbuf->Size_Get());
 	p_world->Object_Register(image);
+	
+	picbuf->Jpg_Open("Game.jpg");
+	S_Image * game_image = new S_Image;
+	game_image->Visual_Set(0);
+	game_image->Image_Set(picbuf->Pic_Buf_Get(),picbuf->Size_Get());
+	p_world->Object_Register(game_image);
 
 	while(Welcome(god,p_world,eye))
-		Game_Run(god,p_world);
+		Game_Run(god,p_world,game_image);
 
 	return 0;
 }

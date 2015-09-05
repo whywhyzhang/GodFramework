@@ -2,11 +2,11 @@
 #include <string>
 #include <stdio.h>
 
-#include "../../God.h"
-#include "../../L_Window.h"
-#include "../../S_Button.h"
-#include "../../S_Label.h"
-#include "../../E_2Dto2D.h"
+#include "../../include/God.h"
+#include "../../include/L_Window.h"
+#include "../../include/S_Button.h"
+#include "../../include/S_Label.h"
+#include "../../include/E_2Dto2D.h"
 
 using std::string;
 

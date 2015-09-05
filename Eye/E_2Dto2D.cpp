@@ -2,9 +2,9 @@
 	The implement of E_2Dto2D class.
 */
 
-#include "E_2Dto2D.h"
-#include "G_World.h"
-#include "G_Sprit.h"
+#include "../include/E_2Dto2D.h"
+#include "../include/G_World.h"
+#include "../include/G_Sprit.h"
 
 bool E_2Dto2D::Sprit_Cmp::operator () (const G_Sprit *p1,const G_Sprit *p2)
 {

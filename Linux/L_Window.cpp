@@ -13,7 +13,7 @@
 #include <jpeglib.h>
 #include <jerror.h>
 
-#include "L_Window.h"
+#include "../include/L_Window.h"
 
 Display * L_Window::xlib_dis=0;
 int L_Window::win_cou=0;

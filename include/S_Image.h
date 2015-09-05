@@ -11,6 +11,7 @@ class S_Image : public G_Sprit
 {
 	private:
 		void * image;
+		POS pic_draw_pos;
 
 	public:
 		S_Image(POS=POS(0,0));
@@ -20,6 +21,8 @@ class S_Image : public G_Sprit
 
 		void Image_Draw();
 		void Redraw();
+		
+		void PicDraw_Pos_Set(POS);
 
 		int  Message_Process(const MESSAGE *mes);
 };

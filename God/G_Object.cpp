@@ -2,8 +2,8 @@
 	This is the abstract of all object.
 */
 
-#include "G_Object.h"
-#include "G_World.h"
+#include "../include/G_Object.h"
+#include "../include/G_World.h"
 
 int G_Object::obj_cou=0;
 

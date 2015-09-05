@@ -109,7 +109,7 @@ bool Game_Lab::Process_Register()
 
 //////////////////////////////////////////////////////////////////
 
-Game_But::Game_But(int n, POS pos, SIZE size, int pri)
+Game_But::Game_But(int n, POS pos, SIZE size, S_Image * p_ima, int pri)
 {
 	num=n;
 	state=0;
@@ -117,6 +117,11 @@ Game_But::Game_But(int n, POS pos, SIZE size, int pri)
 	spr_p=pos;
 	spr_size=size;
 	pri_num=pri;
+
+	image=p_ima;
+
+	if(image)
+		image->Size_Set(size);
 
 	text.clear();
 
@@ -201,7 +206,7 @@ void Game_But::State_Set(int t)
 	}
 	else if(t==1)
 	{
-		//mou_on=0;
+		//mou_on=0;				// A bug.
 		//p_world->Message_Process_Delete(M_MOU_MOV,obj_num);
 		//p_world->Message_Process_Delete(M_MOU_PRE,obj_num);
 		
@@ -241,7 +246,16 @@ void Game_But::Button_Draw()
 		}
 		else if(mou_on==0 && state!=1)
 		{
-			p_world->Message_Send(MESSAGE{M_REC_FIL,spr_p.x,spr_p.y,spr_size.w,spr_size.h,0xBBBBBB});
+			if(image)
+			{
+				image->Pos_Set(spr_p);
+				image->PicDraw_Pos_Set(spr_p);
+				image->Image_Draw();
+			//	p_world->Message_Send(MESSAGE{M_REC_FIL,spr_p.x,spr_p.y,spr_size.w,spr_size.h,0xBBBBBB});
+			}
+			else
+				p_world->Message_Send(MESSAGE{M_REC_FIL,spr_p.x,spr_p.y,spr_size.w,spr_size.h,0xBBBBBB});
+
 			p_world->Message_Send(MESSAGE{M_REC_DRW,spr_p.x,spr_p.y,spr_size.w,spr_size.h,0});
 			col=0;
 		}

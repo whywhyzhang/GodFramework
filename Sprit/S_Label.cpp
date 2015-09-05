@@ -4,8 +4,8 @@
 
 #include <algorithm>
 
-#include "S_Label.h"
-#include "G_World.h"
+#include "../include/S_Label.h"
+#include "../include/G_World.h"
 
 using std::min;
 

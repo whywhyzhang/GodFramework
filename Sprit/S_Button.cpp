@@ -2,8 +2,8 @@
 	The implement of S_Button.
 */
 
-#include "S_Button.h"
-#include "G_World.h"
+#include "../include/S_Button.h"
+#include "../include/G_World.h"
 
 S_Button::S_Button(POS p,SIZE s,char *str,int pri)
 {

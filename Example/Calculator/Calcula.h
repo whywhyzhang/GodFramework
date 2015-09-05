@@ -4,13 +4,13 @@
 #include <string.h>
 #include <string>
 
-#include "../../God.h"
-#include "../../L_Window.h"
-#include "../../S_Button.h"
-#include "../../S_Label.h"
-#include "../../S_Image.h"
-#include "../../T_Picture.h"
-#include "../../E_2Dto2D.h"
+#include "../../include/God.h"
+#include "../../include/L_Window.h"
+#include "../../include/S_Button.h"
+#include "../../include/S_Label.h"
+#include "../../include/S_Image.h"
+#include "../../include/T_Picture.h"
+#include "../../include/E_2Dto2D.h"
 
 class Cal_Lab : public S_Label
 {

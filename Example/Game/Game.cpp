@@ -24,7 +24,7 @@ bool Welcome(God & god, G_World * p_world, G_Eye * eye)
 	return ret-1;
 }
 
-bool Game_Run(God & god, G_World * p_world)
+bool Game_Run(God & god, G_World * p_world, S_Image * image)
 {
 	int land_num=40;
 	SIZE num_size(16,16);
@@ -37,7 +37,7 @@ bool Game_Run(God & god, G_World * p_world)
 
 	int len=num_size.w*num_size.h;
 	Game_But * but_rem [len];
-	Button_Init(but_rem, p_world,num_size,land_num,SIZE(35,35),SIZE(1,1),POS(62,58));
+	Button_Init(but_rem, p_world,num_size,land_num,SIZE(35,35),SIZE(1,1),POS(62,58),image);
 
 	Game_Func * p_func = new Game_Func(num_size.w*num_size.h-land_num);
 	p_world->Object_Register(p_func);
@@ -59,7 +59,7 @@ bool Game_Run(God & god, G_World * p_world)
 	return 0;
 }
 
-void Button_Init(Game_But * but_rem [], G_World * p_world, SIZE num_size, int land_num, SIZE but_size, SIZE space_size, POS start_pos)
+void Button_Init(Game_But * but_rem [], G_World * p_world, SIZE num_size, int land_num, SIZE but_size, SIZE space_size, POS start_pos,S_Image * image)
 {
 	int len=num_size.h * num_size.w;
 	int * num = new int [len];
@@ -86,7 +86,7 @@ void Button_Init(Game_But * but_rem [], G_World * p_world, SIZE num_size, int la
 	{
 		tpos.x=start_pos.x+(i % num_size.w)*tw;
 		tpos.y=start_pos.y+(i / num_size.w)*th;
-		p_but = new Game_But(rem[i],tpos,but_size);
+		p_but = new Game_But(rem[i],tpos,but_size,image);
 		p_world->Object_Register(p_but);
 		
 		but_rem[i]=p_but;

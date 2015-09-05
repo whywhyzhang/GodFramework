@@ -8,7 +8,7 @@
 #include <cstring>
 #include <sys/time.h>
 
-#include "L_Input.h"
+#include "../include/L_Input.h"
 
 ////////////////////////////////////////////////////
 // The function of L_Key_Mouse.
