@@ -106,7 +106,7 @@ void G_World::Event_Happend()
 int G_World::Message_Process(const MESSAGE *mes)
 {
 	pair <MES_ITER,MES_ITER> temp=mes_obj_rem.equal_range(mes->type);
-	MES_ITER iter;
+	MES_ITER iter,pre_iter;
 	OBJ_ITER obj;
 	int ret_temp;
 
@@ -114,8 +114,26 @@ int G_World::Message_Process(const MESSAGE *mes)
 	{
 		obj=obj_rem.find((*iter).second);
 		if(obj!=obj_rem.end())
+		{
 			if(ret_temp=((*obj).second->Message_Process(mes)))
 				return ret_temp;
+		}
+		else
+		{
+			pre_iter=iter;
+			
+			if(pre_iter!=mes_obj_rem.begin())			// Oh my God , What a God Bug.
+			{
+				--pre_iter;
+				mes_obj_rem.erase(iter);				// !!!
+				iter=pre_iter;
+			}
+			else
+			{
+				mes_obj_rem.erase(iter);
+				iter=mes_obj_rem.begin();
+			}
+		}
 	}
 	
 	return 0;
@@ -162,6 +180,16 @@ void G_World::World_Message_Send(const MESSAGE &mes)
 {
 	MESSAGE *temp=new MESSAGE(mes);
 	world_mes_que.push(temp);
+}
+
+bool G_World::Send_Message_To_World(WORLD_NUM num, const MESSAGE &mes)
+{
+	WORLD_ITER iter=other_world_rem.find(num);
+	if(iter==other_world_rem.end()) return 0;
+	
+	(iter->second)->World_Message_Send(mes);
+	
+	return 1;
 }
 
 bool G_World::Object_Register(G_Object * p_obj)
@@ -220,10 +248,11 @@ void G_World::Other_World_Register(G_World * p)
 {
 	if(!p) return;
 	
-	other_world_rem.insert(p);
+	WORLD_NUM num =  p->World_Num_Get();
+	other_world_rem.insert(pair <WORLD_NUM, G_World *> (num,p));
 }
 
-bool G_World::Other_World_Delete(G_World * p)
+bool G_World::Other_World_Delete(WORLD_NUM num)
 {
-	return other_world_rem.erase(p);
+	return other_world_rem.erase(num);
 }

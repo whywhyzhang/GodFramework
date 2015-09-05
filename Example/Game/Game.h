@@ -1,31 +1,14 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "../../God.h"
-#include "../../L_Window.h"
-#include "../../S_Button.h"
-#include "../../S_Label.h"
-#include "../../S_Image.h"
-#include "../../E_2Dto2D.h"
-#include "../../T_Picture.h"
+#include "Sprit.h"
 
-class Wel_Func : public G_Sprit
-{
-	private:
-		int rem1,rem2;
+bool Welcome(God &, G_World *, G_Eye *);
+bool Game_Run(God &, G_World *);
+void Button_Init(Game_But **, G_World *, SIZE, int, SIZE, SIZE, POS);
+void GetRand(int *,int);
+int  GetNum(int,SIZE,int *);			// Get how many landmine is this but's neigh.
 
-	public:
-		Wel_Func();
-		int Message_Process(const MESSAGE *);
-		int operator () (int);
-
-		void Register(int,int);
-};
-
-bool Welcome();
-bool Game_Run();
-
-G_World * Out_World_Init(God &,L_Window &);
-G_World * Phy_World_Init(God &);
+void Game_Result(God &,G_World *,int);
 
 #endif

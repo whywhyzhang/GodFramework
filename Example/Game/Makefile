@@ -8,7 +8,7 @@ OBJECT = ../../God.o ../../G_World.o ../../G_Object.o ../../G_Input.o ../../G_Ou
 		 ../../T_Picture.o \
 		 ../../S_Button.o ../../S_Label.o ../../S_Image.o \
 		 ../../E_2Dto2D.o \
-		 Game.o main.o
+		 Game.o Sprit.o main.o
 
 test : $(OBJECT)
 	$(CC) $(CFLAGS) $(OBJECT) $(CINCLUDE) $(LFLAGS) -o game
@@ -23,6 +23,7 @@ S_Label.o : ../../S_Label.h ../../G_Sprit.h
 S_Image.o : ../../S_Image.h ../../G_Sprit.h
 E_2Dto2D.o : ../../E_2Dto2D.h ../../G_Eye.h
 Game.o : Game.h
+Sprit.o : Sprit.h
 
 .PHONY : clean
 clean :

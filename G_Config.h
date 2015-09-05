@@ -53,10 +53,10 @@ const int MOU_BUTTON_NUM=4;
 const int USEC_PER_SEC=1000000;
 struct STR_TIME
 {
+	int  num;
 	long sec,usec;
 	long sec_per,usec_per;				// The period of time point.
 	bool is_use;
-	int num;
 	
 	STR_TIME(int n=0,long a=0,long b=0,long c=0,long long d=0)
 	{
@@ -155,6 +155,29 @@ struct SIZE
 	
 	SIZE(unsigned int _w=0,unsigned int _h=0):w(_w),h(_h) {}
 };
+
+struct SPEED
+{
+	double vx,vy;
+	
+	SPEED(double a=0,double b=0):vx(a),vy(b)
+	{}
+};
+
+struct POWER
+{
+	double fx,fy;
+	
+	POWER(double a=0,double b=0):fx(a),fy(b)
+	{}
+};
+
+const double eps=1e-8;
+
+inline int sgn(double x)
+{
+	return x<-eps ? -1 : x>eps;
+}
 
 // Config about Message.
 typedef int MES_TYPE;

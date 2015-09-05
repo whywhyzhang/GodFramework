@@ -36,7 +36,7 @@ bool S_Image::Image_Set(const unsigned char * p,SIZE s)
 
 void S_Image::Image_Draw()
 {
-	MESSAGE mes={M_PIC_DRW,0,0,spr_size.w,spr_size.h,0};
+	MESSAGE mes={M_PIC_DRW,spr_p.x,spr_p.y,spr_size.w,spr_size.h,0};
 	mes.p=(void *)image;
 	p_world->Message_Send(mes);
 }

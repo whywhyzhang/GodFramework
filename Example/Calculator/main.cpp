@@ -17,6 +17,13 @@ int main()
 	E_2Dto2D * eye = new E_2Dto2D(SIZE(700,500));
 	p_world->Object_Register(eye);
 	p_world->Message_Process_Register(M_EXPOSE,eye->Obj_Num_Get());
+	
+	T_JPEG * picbuf = new T_JPEG;
+	picbuf->Jpg_Open("background.jpg");
+	
+	S_Image * image = new S_Image;
+	image->Image_Set(picbuf->Pic_Buf_Get(),picbuf->Size_Get());
+	p_world->Object_Register(image);
 
 	Cal_Lab * lab = new Cal_Lab(POS(150,50),SIZE(400,50),0,1,48);
 	p_world->Object_Register(lab);

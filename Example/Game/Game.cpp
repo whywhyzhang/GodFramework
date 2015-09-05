@@ -1,57 +1,7 @@
 #include "Game.h"
 
-Wel_Func::Wel_Func()
+bool Welcome(God & god, G_World * p_world, G_Eye * eye)
 {
-	rem1=rem2=0;
-}
-
-int Wel_Func::Message_Process(const MESSAGE *)
-{
-	return 0;
-}
-
-int Wel_Func::operator () (int num)
-{
-	if(num==rem1)
-		return 1;
-	else if(num==rem2)
-		return 2;
-
-	return 0;
-}
-
-void Wel_Func::Register(int t,int num)
-{
-	if(t==1)
-		rem1=num;
-	else if(t==2)
-		rem2=num;
-}
-
-bool Welcome()
-{
-	God god;
-
-	G_World * p_world = new G_World;
-	god.World_Register(p_world);
-
-	L_Window win(POS(100,100),SIZE(700,650));
-	win.Window_Show();
-	win.Event_Register(MESSAGE{M_MOU_MOV});
-	win.Event_Register(MESSAGE{M_MOU_PRE,1});
-	win.Event_Register(MESSAGE{M_EXPOSE});
-	win.Register_To_World(p_world);
-
-	E_2Dto2D * eye = new E_2Dto2D(SIZE(700,650));
-	p_world->Object_Register(eye);
-	p_world->Message_Process_Register(M_EXPOSE,eye->Obj_Num_Get());
-
-	T_JPEG * picbuf = new T_JPEG;
-	picbuf->Jpg_Open("Welcome.jpg");
-	S_Image * image = new S_Image;
-	image->Image_Set(picbuf->Pic_Buf_Get(),picbuf->Size_Get());
-	p_world->Object_Register(image);
-
 	S_Button * but1 = new S_Button(POS(300,190),SIZE(100,50),"Start");
 	S_Button * but2 = new S_Button(POS(300,390),SIZE(100,50),"Exit");
 
@@ -64,37 +14,162 @@ bool Welcome()
 	p_world->Object_Register(but1);
 	p_world->Object_Register(but2);
 
-	return god.Run()-1;
+	int ret = god.Run();
+	
+	delete but1;
+	delete but2;
+	
+	p_world->Message_Send(MESSAGE{M_PAINT});
+	
+	return ret-1;
 }
 
-bool Game_Run()
+bool Game_Run(God & god, G_World * p_world)
 {
-	God god;
+	int land_num=40;
+	SIZE num_size(16,16);
 
-	L_Window win(POS(100,100),SIZE(700,650));
-	win.Window_Show();
+	Time_Meter * p_time = new Time_Meter(1000000,POS(130,12));
+	p_world->Object_Register(p_time);
 
-	G_World * out_world = Out_World_Init(god,win);
-	G_World * phy_world = Phy_World_Init(god);
+	Game_Lab * p_lab = new Game_Lab(land_num,POS(470,12));
+	p_world->Object_Register(p_lab);
 
-	out_world->Other_World_Register(phy_world);
-	phy_world->Other_World_Register(out_world);
+	int len=num_size.w*num_size.h;
+	Game_But * but_rem [len];
+	Button_Init(but_rem, p_world,num_size,land_num,SIZE(35,35),SIZE(1,1),POS(62,58));
 
-	god.Run();
+	Game_Func * p_func = new Game_Func(num_size.w*num_size.h-land_num);
+	p_world->Object_Register(p_func);
+
+	int ret=god.Run();
+
+	for(int i=0;i<len;++i)
+		but_rem[i]->State_Set(1);
+
+	Game_Result(god,p_world,ret);
+
+	for(int i=0;i<len;++i)
+		delete but_rem[i];
+	delete p_lab;
+	delete p_func;
+	delete p_time;
+	p_world->Message_Send(MESSAGE{M_PAINT});
 
 	return 0;
 }
 
-G_World * Out_World_Init(God &god,L_Window &win)
+void Button_Init(Game_But * but_rem [], G_World * p_world, SIZE num_size, int land_num, SIZE but_size, SIZE space_size, POS start_pos)
 {
-	G_World * p_world = new G_World;
+	int len=num_size.h * num_size.w;
+	int * num = new int [len];
+	int * rem = new int [len];
+	Game_But * p_but;
+	POS tpos;
 
-	return p_world;
+	for(int i=0;i<len;++i)
+		rem[i]=0;
+
+	GetRand(num,len);
+
+	for(int i=0;i<land_num;++i)
+		rem[num[i]]=-1;
+
+	for(int i=0;i<len;++i)
+		if(rem[i]!=-1)
+			rem[i]=GetNum(i,num_size,rem);
+
+	int tw=but_size.w+space_size.w;
+	int th=but_size.h+space_size.h;
+
+	for(int i=0;i<len;++i)
+	{
+		tpos.x=start_pos.x+(i % num_size.w)*tw;
+		tpos.y=start_pos.y+(i / num_size.w)*th;
+		p_but = new Game_But(rem[i],tpos,but_size);
+		p_world->Object_Register(p_but);
+		
+		but_rem[i]=p_but;
+	}
+
+	const int step[8][2]={{1,1},{1,0},{1,-1},{0,-1},{-1,-1},{-1,0},{-1,1},{0,1}};
+	int ti,tj;
+
+	for(int i=0;i<num_size.h;++i)
+		for(int j=0;j<num_size.w;++j)
+			for(int k=0;k<8;++k)
+			{
+				ti=i+step[k][0];
+				tj=j+step[k][1];
+
+				if(ti>=0 && ti<num_size.h && tj>=0 && tj<num_size.w)
+					but_rem[i*num_size.w+j]->Neigh_Set(but_rem[ti*num_size.w+tj],k);
+			}
 }
 
-G_World * Phy_World_Init(God &god)
+void GetRand(int * num, int len)
 {
-	G_World * p_world = new G_World;
+	for(int i=0;i<len;++i)
+		num[i]=i;
 
-	return p_world;
+	srand(time(0));
+
+	int t,temp;
+
+	for(int i=len;i>0;--i)
+	{
+		t=rand()%i;
+		swap(num[t],num[i-1]);
+	}
+}
+
+int GetNum(int pos, SIZE size, int * num)
+{
+	const int step[8][2]={{1,1},{1,0},{1,-1},{0,-1},{-1,-1},{-1,0},{-1,1},{0,1}};
+
+	int ret=0;
+	int r=pos/size.w, c=pos%size.w;
+	int tr,tc;
+
+	for(int i=0;i<8;++i)
+	{
+		tr=r+step[i][0];
+		tc=c+step[i][1];
+
+		if(tr<size.h && tr>=0 && tc<size.w && tc>=0)
+			if(num[tr*size.w+tc]==-1)
+				++ret;
+	}
+
+	return ret;
+}
+
+void Game_Result(God &god, G_World * p_world, int res)
+{
+	S_Button * but = new S_Button(POS(300,490),SIZE(100,50),"Return");
+
+	Wel_Func func;
+	func.Register(3,but->Obj_Num_Get());
+	
+	but->Function_Register(func,1);
+	p_world->Object_Register(but);
+
+	T_JPEG * picbuf = new T_JPEG;
+	if(res==1)
+		picbuf->Jpg_Open("Win.jpg");
+	else if(res==2)
+		picbuf->Jpg_Open("Fail.jpg");
+
+	S_Image * image = new S_Image();
+	SIZE size=picbuf->Size_Get();
+	int x=(700-size.w)/2;
+	image->Pos_Set(POS(x,100));
+	image->Image_Set(picbuf->Pic_Buf_Get(),size);
+	p_world->Object_Register(image);
+
+	god.Run();
+
+	delete image;
+	delete but;
+	p_world->Message_Send(MESSAGE{M_PAINT});
 }

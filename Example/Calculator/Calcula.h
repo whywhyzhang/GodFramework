@@ -8,6 +8,8 @@
 #include "../../L_Window.h"
 #include "../../S_Button.h"
 #include "../../S_Label.h"
+#include "../../S_Image.h"
+#include "../../T_Picture.h"
 #include "../../E_2Dto2D.h"
 
 class Cal_Lab : public S_Label

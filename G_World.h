@@ -28,7 +28,9 @@ class G_World
 
 	private:
 		queue <const MESSAGE *> world_mes_que;								// Message coming from other world. Maybe Multi thread there.
-		set <G_World *> other_world_rem;									// Remember other world that this world can send message to.
+		map <WORLD_NUM, G_World *> other_world_rem;							// Remember other world that this world can send message to.
+		
+		typedef map <WORLD_NUM, G_World *> ::iterator WORLD_ITER;
 
 	private:
 		void Event_Happend();
@@ -56,9 +58,10 @@ class G_World
 		
 	public:
 		void World_Message_Send(const MESSAGE &);							// Send a message from other world.
+		bool Send_Message_To_World(WORLD_NUM, const MESSAGE &);				// Send a message to other world.
 		
 		void Other_World_Register(G_World *);
-		bool Other_World_Delete(G_World *);
+		bool Other_World_Delete(WORLD_NUM);
 };
 
 #endif
