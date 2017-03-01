@@ -1,18 +1,18 @@
 # God Framework
 
 This is a small framework developed by C++.  
-And that's my C++ homework.  
 ^_^  
 
 The next will be writed by Chinese, if you don't know Chinese, Please use Google Translator. Thank You.  
 
 # 介绍：
 
-	God开发框架是一个跨平台的可扩展的C++开发框架。  
+	God开发框架是一个跨平台的可扩展的C++开发框架。 
+	目前只实现Linux平台。	
 	采用面向对象的方法，抽象所有运行实体为类结构。  
 	采用消息触发机制，由消息驱使程序运行状态的改变。  
-	封装消息队列和对象管理，采用树形结构管理。  
-	
+	封装消息队列和对象管理，采用树形结构管理。  
+	Example文件中包含使用样例。	
 # 框架特性：
 
 	框架分为7个基本类：  
